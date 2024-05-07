@@ -33,7 +33,7 @@ async fn main() {
     let mut image = Image::gen_image_color(WIDTH_U16, HEIGHT_U16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let mut camera = Camera3D {
+    let camera = Camera3D {
         position: vec3(-15., 15., -5.),
         up: vec3(0., 1., 0.),
         target: vec3(10., 5., 0.),
