@@ -1,0 +1,11 @@
+[package]
+name = "webcam"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ffimage = "0.10.0"
+ffimage_yuv = "0.10.0"
+macroquad = "0.4.5"
+v4l = "0.14.0"
+
