@@ -66,7 +66,7 @@ async fn main() {
             let alpha = 255;
             let pixel = vec![r, g, b, alpha];
             image_data[i * 2] = pixel.try_into().unwrap();
-            let rgb2 = Rgb::<u8>::from(yuv[0]);
+            let rgb2 = Rgb::<u8>::from(yuv[1]);
             let r = rgb2[0];
             let g = rgb2[1];
             let b = rgb2[2];
