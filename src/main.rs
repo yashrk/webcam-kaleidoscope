@@ -35,8 +35,8 @@ async fn main() {
 
     let camera = Camera3D {
         position: vec3(-15., 15., -5.),
-        up: vec3(0., 1., 0.),
-        target: vec3(10., 5., 0.),
+        up: vec3(0., 0.001, 0.),
+        target: vec3(5., 0., 0.),
         ..Default::default()
     };
 
@@ -85,20 +85,34 @@ async fn main() {
         draw_affine_parallelogram(
             10. * Vec3::NEG_Y,
             10. * Vec3::X,
-            10. * Vec3::Z,
+            10. * Vec3::Y,
             Some(&texture),
             WHITE,
         );
         draw_affine_parallelogram(
             10. * Vec3::NEG_Y,
             10. * Vec3::X,
-            10. * Vec3::Y,
+            10. * Vec3::NEG_Z,
             Some(&texture),
             WHITE,
         );
         draw_affine_parallelogram(
-            10. * Vec3::Y,
             10. * Vec3::X,
+            10. * Vec3::X,
+            10. * Vec3::NEG_Z,
+            Some(&texture),
+            WHITE,
+        );
+        draw_affine_parallelogram(
+            vec3(10., 0., 0.),
+            10. * Vec3::NEG_Y,
+            10. * Vec3::NEG_Z,
+            Some(&texture),
+            WHITE,
+        );
+        draw_affine_parallelogram(
+            Vec3::ZERO,
+            10. * Vec3::NEG_X,
             10. * Vec3::Z,
             Some(&texture),
             WHITE,
