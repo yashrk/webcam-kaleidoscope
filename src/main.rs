@@ -1,5 +1,7 @@
+use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
+use std::fs;
 use v4l::buffer::Type;
 use v4l::io::mmap::Stream;
 use v4l::io::traits::CaptureStream;
@@ -33,11 +35,159 @@ async fn main() {
     let mut image = Image::gen_image_color(fmt.width as u16, fmt.height as u16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let camera = Camera3D {
-        position: vec3(-15., 15., -5.),
-        up: vec3(0., 0.001, 0.),
-        target: vec3(5., 0., 0.),
+    let vertex_shader: String = fs::read_to_string("resources/crt.vs").unwrap();
+    let fragment_shader: String = fs::read_to_string("resources/crt.fs").unwrap();
+
+    let pipeline_params = PipelineParams {
+        depth_write: true,
+        depth_test: Comparison::LessOrEqual,
         ..Default::default()
+    };
+
+    let material = load_material(
+        ShaderSource::Glsl {
+            vertex: &vertex_shader,
+            fragment: &fragment_shader,
+        },
+        MaterialParams {
+            pipeline_params,
+            ..Default::default()
+        },
+    )
+    .unwrap();
+
+    let camera = Camera3D {
+        position: vec3(0., 0., -5.),
+        up: vec3(0., 0.000001, 0.),
+        target: vec3(0., 0., 0.),
+        ..Default::default()
+    };
+
+    let mesh_1 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(0., 2., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(2., 1., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
+    };
+    let mesh_2 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(-2., 1., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(0., 2., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
+    };
+    let mesh_3 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(-2., -1., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(-2., 1., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
+    };
+    let mesh_4 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(-2., -1., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(0., -2., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
+    };
+    let mesh_5 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(0., -2., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(2., -1., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
+    };
+    let mesh_6 = Mesh {
+        vertices: vec![
+            Vertex {
+                position: vec3(0., 0., 0.),
+                uv: vec2(0., 0.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(2., 1., 0.),
+                uv: vec2(0., 1.),
+                color: WHITE,
+            },
+            Vertex {
+                position: vec3(2., -1., 0.),
+                uv: vec2(1., 1.),
+                color: WHITE,
+            },
+        ],
+        indices: vec![0, 1, 2],
+        texture: Some(texture.clone()),
     };
 
     loop {
@@ -50,57 +200,25 @@ async fn main() {
         //
         decode(&mut image, buf);
         texture.update(&image);
-
-        clear_background(LIGHTGRAY);
-
+        clear_background(BLACK);
         set_camera(&camera);
-
-        draw_grid(1, 0.1, WHITE, RED);
-        draw_plane(vec3(-8., 0., -8.), vec2(5., 5.), Some(&texture), WHITE);
-
-        draw_affine_parallelogram(
+        draw_grid_ex(
+            20,
+            0.1,
+            RED,
+            GRAY,
             Vec3::ZERO,
-            10. * Vec3::X,
-            10. * Vec3::Z,
-            Some(&texture),
-            WHITE,
+            Quat::from_xyzw(0., 1., 1., 0.),
         );
-        draw_affine_parallelogram(
-            10. * Vec3::NEG_Y,
-            10. * Vec3::X,
-            10. * Vec3::Y,
-            Some(&texture),
-            WHITE,
-        );
-        draw_affine_parallelogram(
-            10. * Vec3::NEG_Y,
-            10. * Vec3::X,
-            10. * Vec3::NEG_Z,
-            Some(&texture),
-            WHITE,
-        );
-        draw_affine_parallelogram(
-            10. * Vec3::X,
-            10. * Vec3::X,
-            10. * Vec3::NEG_Z,
-            Some(&texture),
-            WHITE,
-        );
-        draw_affine_parallelogram(
-            vec3(10., 0., 0.),
-            10. * Vec3::NEG_Y,
-            10. * Vec3::NEG_Z,
-            Some(&texture),
-            WHITE,
-        );
-        draw_affine_parallelogram(
-            vec3(5.0, 0., 0.),
-            10. * Vec3::NEG_X,
-            10. * Vec3::Z,
-            Some(&texture),
-            WHITE,
-        );
-        set_default_camera();
+        gl_use_material(&material);
+        draw_mesh(&mesh_1);
+        draw_mesh(&mesh_2);
+        draw_mesh(&mesh_3);
+        draw_mesh(&mesh_4);
+        draw_mesh(&mesh_5);
+        draw_mesh(&mesh_6);
+        gl_use_default_material();
+
         next_frame().await
     }
 }
