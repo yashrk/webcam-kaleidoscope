@@ -35,7 +35,7 @@ async fn main() {
 
     let camera = Camera3D {
         position: vec3(-15., 15., -5.),
-        up: vec3(0., 0.1, 0.),
+        up: vec3(0., 0.001, 0.),
         target: vec3(5., 0., 0.),
         ..Default::default()
     };
@@ -55,7 +55,6 @@ async fn main() {
 
         set_camera(&camera);
 
-        // draw_texture(&texture, 0., 0., WHITE);
         draw_grid(1, 0.1, WHITE, RED);
         draw_plane(vec3(-8., 0., -8.), vec2(5., 5.), Some(&texture), WHITE);
 
