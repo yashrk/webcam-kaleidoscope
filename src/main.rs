@@ -1,6 +1,3 @@
-
-
-
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 use v4l::buffer::Type;
@@ -9,7 +6,6 @@ use v4l::io::traits::CaptureStream;
 use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
-
 
 use webcam::decoder::*;
 
@@ -28,9 +24,9 @@ async fn main() {
     let fmt = dev.set_format(&fmt).expect("Failed to write format");
     println!("Format in use:\n{}", fmt);
     let decode = if fmt.fourcc == FourCC::new(b"MJPG") {
-	decode_mjpeg
+        decode_mjpeg
     } else {
-	decode_yuyv
+        decode_yuyv
     };
     let mut stream = Stream::with_buffers(&dev, Type::VideoCapture, BUFFER_COUNT)
         .expect("Failed to create buffer stream");
@@ -52,16 +48,16 @@ async fn main() {
         //
         // GUI
         //
-	decode(&mut image, buf);
+        decode(&mut image, buf);
         texture.update(&image);
 
-	clear_background(LIGHTGRAY);
+        clear_background(LIGHTGRAY);
 
         set_camera(&camera);
 
-	// draw_texture(&texture, 0., 0., WHITE);
+        // draw_texture(&texture, 0., 0., WHITE);
         draw_grid(1, 0.1, WHITE, RED);
-	draw_plane(vec3(-8., 0., -8.), vec2(5., 5.), Some(&texture), WHITE);
+        draw_plane(vec3(-8., 0., -8.), vec2(5., 5.), Some(&texture), WHITE);
 
         draw_affine_parallelogram(
             Vec3::ZERO,
@@ -105,7 +101,7 @@ async fn main() {
             Some(&texture),
             WHITE,
         );
-	set_default_camera();
+        set_default_camera();
         next_frame().await
     }
 }
