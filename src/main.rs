@@ -15,7 +15,15 @@ const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
 
-#[macroquad::main("Simple window")]
+fn window_conf() -> Conf {
+    Conf {
+        window_title: "Kaleidoscope".to_owned(),
+        fullscreen: true,
+        ..Default::default()
+    }
+}
+
+#[macroquad::main(window_conf)]
 async fn main() {
     let dev = Device::new(0).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
