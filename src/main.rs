@@ -1,6 +1,6 @@
-use ffimage::color::Rgb;
-use ffimage_yuv::yuv::Yuv;
-use ffimage_yuv::yuv422::Yuyv;
+
+
+
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 use v4l::buffer::Type;
@@ -9,31 +9,24 @@ use v4l::io::traits::CaptureStream;
 use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
-use jpeg_decoder as jpeg;
+
 
 use webcam::decoder::*;
 
-
-const WIDTH_U16: u16 = 640;
-const HEIGHT_U16: u16 = 360;
 const WIDTH_U32: u32 = 640;
-const HEIGHT_U32: u32 = 360;
+const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
 
 #[macroquad::main("Simple window")]
 async fn main() {
     let mut dev = Device::new(0).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
-    println!("Format as is:\n{}", fmt);
-
     fmt.width = WIDTH_U32;
     fmt.height = HEIGHT_U32;
     fmt.fourcc = FourCC::new(b"YVUV");
     println!("Format to set:\n{}", fmt);
     let fmt = dev.set_format(&fmt).expect("Failed to write format");
-
     println!("Format in use:\n{}", fmt);
-
     let decode = if fmt.fourcc == FourCC::new(b"MJPG") {
 	decode_mjpeg
     } else {

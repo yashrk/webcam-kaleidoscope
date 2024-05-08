@@ -1,4 +1,4 @@
-use v4l::FourCC;
+
 use jpeg_decoder as jpeg;
 use macroquad::prelude::*;
 use ffimage::color::Rgb;
