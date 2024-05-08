@@ -19,7 +19,7 @@ const BUFFER_COUNT: u32 = 4;
 
 #[macroquad::main("Simple window")]
 async fn main() {
-    let mut dev = Device::new(0).expect("Failed to open device");
+    let dev = Device::new(0).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
     fmt.width = WIDTH_U32;
     fmt.height = HEIGHT_U32;
@@ -32,7 +32,7 @@ async fn main() {
     } else {
 	decode_yuyv
     };
-    let mut stream = Stream::with_buffers(&mut dev, Type::VideoCapture, BUFFER_COUNT)
+    let mut stream = Stream::with_buffers(&dev, Type::VideoCapture, BUFFER_COUNT)
         .expect("Failed to create buffer stream");
     let mut image = Image::gen_image_color(fmt.width as u16, fmt.height as u16, WHITE);
     let texture = Texture2D::from_image(&image);
