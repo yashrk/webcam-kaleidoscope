@@ -8,13 +8,13 @@ pub fn decode_mjpeg(image: &mut Image, buf: &[u8]) {
     let image_data = image.get_image_data_mut();
     let mut decoder = jpeg::Decoder::new(buf);
     let decoded = decoder.decode().expect("failed to decode JPEG");
-    for i in 0..decoded.len() - 2 {
-        let r = decoded[i + 1];
-        let g = decoded[i + 2];
-        let b = decoded[i];
+    for i in 0..decoded.len() / 3 {
+        let r = decoded[i * 3];
+        let g = decoded[i * 3 + 1];
+        let b = decoded[i * 3 + 2];
         let alpha = 255;
         let pixel = vec![r, g, b, alpha];
-        image_data[i / 3] = pixel.try_into().unwrap();
+        image_data[i] = pixel.try_into().unwrap();
     }
 }
 
