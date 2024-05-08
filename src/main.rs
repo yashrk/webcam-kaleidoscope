@@ -18,9 +18,15 @@ const BUFFER_COUNT: u32 = 4;
 fn window_conf() -> Conf {
     Conf {
         window_title: "Kaleidoscope".to_owned(),
-        fullscreen: true,
+        fullscreen: false,
         ..Default::default()
     }
+}
+
+fn angle2vec(angle: f32) -> Vec3 {
+    let x = angle.sin();
+    let y = angle.cos();
+    vec3(x, y, 0.)
 }
 
 #[macroquad::main(window_conf)]
@@ -64,9 +70,10 @@ async fn main() {
     )
     .unwrap();
 
-    let camera = Camera3D {
+    let mut camera_angle = 0.;
+    let mut camera = Camera3D {
         position: vec3(0., 0., -5.),
-        up: vec3(0., 0.000001, 0.),
+        up: angle2vec(camera_angle),
         target: vec3(0., 0., 0.),
         ..Default::default()
     };
@@ -208,6 +215,11 @@ async fn main() {
         //
         decode(&mut image, buf);
         texture.update(&image);
+        camera_angle += 0.01;
+        if camera_angle > 2.0 * 3.14 {
+            camera_angle = 0.;
+        }
+        camera.up = angle2vec(camera_angle);
         clear_background(BLACK);
         set_camera(&camera);
         draw_grid_ex(
