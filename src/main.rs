@@ -15,6 +15,11 @@ const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
 
+struct State {
+    camera_angle: f32,
+    is_rotating: bool,
+}
+
 fn window_conf() -> Conf {
     Conf {
         window_title: "Kaleidoscope".to_owned(),
@@ -70,10 +75,13 @@ async fn main() {
     )
     .unwrap();
 
-    let mut camera_angle = 0.;
+    let mut state = State {
+        camera_angle: 0.,
+        is_rotating: true,
+    };
     let mut camera = Camera3D {
         position: vec3(0., 0., -5.),
-        up: angle2vec(camera_angle),
+        up: angle2vec(state.camera_angle),
         target: vec3(0., 0., 0.),
         ..Default::default()
     };
@@ -210,16 +218,28 @@ async fn main() {
         // Webcam
         //
         let (buf, _meta) = stream.next().unwrap();
+        decode(&mut image, buf);
+
+        //
+        // Input
+        //
+        match get_last_key_pressed() {
+            Some(KeyCode::Escape) => break,
+            Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
+            None | _ => (),
+        }
+
         //
         // GUI
         //
-        decode(&mut image, buf);
         texture.update(&image);
-        camera_angle += 0.01;
-        if camera_angle > 2.0 * 3.14 {
-            camera_angle = 0.;
+        if state.is_rotating {
+            state.camera_angle += 0.01;
         }
-        camera.up = angle2vec(camera_angle);
+        if state.camera_angle > 2.0 * 3.14 {
+            state.camera_angle = 0.;
+        }
+        camera.up = angle2vec(state.camera_angle);
         clear_background(BLACK);
         set_camera(&camera);
         draw_grid_ex(
