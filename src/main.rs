@@ -54,8 +54,8 @@ async fn main() {
     let mut image = Image::gen_image_color(fmt.width as u16, fmt.height as u16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let vertex_shader: String = fs::read_to_string("resources/crt.vs").unwrap();
-    let fragment_shader: String = fs::read_to_string("resources/test.fs").unwrap();
+    let vertex_shader: String = fs::read_to_string("resources/default.vs").unwrap();
+    let fragment_shader: String = fs::read_to_string("resources/default.fs").unwrap();
 
     let pipeline_params = PipelineParams {
         depth_write: true,
