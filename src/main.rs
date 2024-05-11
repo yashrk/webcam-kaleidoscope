@@ -55,7 +55,7 @@ async fn main() {
     let texture = Texture2D::from_image(&image);
 
     let vertex_shader: String = fs::read_to_string("resources/default.vs").unwrap();
-    let fragment_shader: String = fs::read_to_string("resources/default.fs").unwrap();
+    let fragment_shader: String = fs::read_to_string("resources/test.fs").unwrap();
 
     let pipeline_params = PipelineParams {
         depth_write: true,
