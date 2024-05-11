@@ -2,6 +2,7 @@ use glob::glob;
 use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
+use std::f32::consts::PI;
 use std::fs;
 use v4l::buffer::Type;
 use v4l::io::mmap::Stream;
@@ -315,7 +316,7 @@ async fn main() {
         if state.is_rotating {
             state.camera_angle += 0.01;
         }
-        if state.camera_angle > 2.0 * 3.14 {
+        if state.camera_angle > 2.0 * PI {
             state.camera_angle = 0.;
         }
 
