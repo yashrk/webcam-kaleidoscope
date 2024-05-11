@@ -80,6 +80,17 @@ async fn main() {
         depth_test: Comparison::LessOrEqual,
         ..Default::default()
     };
+    let mut material = load_material(
+        ShaderSource::Glsl {
+            vertex: &vertex_shaders[v_shader_ind],
+            fragment: &fragment_shaders[f_shader_ind],
+        },
+        MaterialParams {
+            pipeline_params,
+            ..Default::default()
+        },
+    )
+    .unwrap();
 
     let mut state = State {
         camera_angle: 0.,
@@ -234,13 +245,35 @@ async fn main() {
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
+                material = load_material(
+                    ShaderSource::Glsl {
+                        vertex: &vertex_shaders[v_shader_ind],
+                        fragment: &fragment_shaders[f_shader_ind],
+                    },
+                    MaterialParams {
+                        pipeline_params,
+                        ..Default::default()
+                    },
+                )
+                .unwrap();
                 println!("Vertex shader {}", v_shader_ind)
             }
             Some(KeyCode::Right) => {
                 f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
+                material = load_material(
+                    ShaderSource::Glsl {
+                        vertex: &vertex_shaders[v_shader_ind],
+                        fragment: &fragment_shaders[f_shader_ind],
+                    },
+                    MaterialParams {
+                        pipeline_params,
+                        ..Default::default()
+                    },
+                )
+                .unwrap();
                 println!("Fragment shader {}", f_shader_ind)
             }
-            None | _ => (),
+            _ => (),
         }
 
         //
@@ -253,20 +286,6 @@ async fn main() {
         if state.camera_angle > 2.0 * 3.14 {
             state.camera_angle = 0.;
         }
-
-        let fragment_shader = &fragment_shaders[f_shader_ind];
-        let vertex_shader = &vertex_shaders[v_shader_ind];
-        let material = load_material(
-            ShaderSource::Glsl {
-                vertex: vertex_shader,
-                fragment: fragment_shader,
-            },
-            MaterialParams {
-                pipeline_params,
-                ..Default::default()
-            },
-        )
-        .unwrap();
 
         camera.up = angle2vec(state.camera_angle);
         clear_background(BLACK);
