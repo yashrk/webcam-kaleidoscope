@@ -258,8 +258,8 @@ async fn main() {
         let vertex_shader = &vertex_shaders[v_shader_ind];
         let material = load_material(
             ShaderSource::Glsl {
-                vertex: &vertex_shader,
-                fragment: &fragment_shader,
+                vertex: vertex_shader,
+                fragment: fragment_shader,
             },
             MaterialParams {
                 pipeline_params,
