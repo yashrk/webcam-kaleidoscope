@@ -1,3 +1,4 @@
+use glob::glob;
 use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
@@ -54,26 +55,31 @@ async fn main() {
     let mut image = Image::gen_image_color(fmt.width as u16, fmt.height as u16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let vertex_shader: String = fs::read_to_string("resources/default.vs").unwrap();
-    let fragment_shader: String = fs::read_to_string("resources/test.fs").unwrap();
+    let fragment_shaders: Vec<_> = glob("resources/*.fs")
+        .expect("Failed to read glob pattern")
+        .flatten()
+        .map(|x| {
+            println!("{:?}", x.display());
+            fs::read_to_string(x.to_str().unwrap()).unwrap()
+        })
+        .collect();
+    let vertex_shaders: Vec<_> = glob("resources/*.vs")
+        .expect("Failed to read glob pattern")
+        .flatten()
+        .map(|x| {
+            println!("{:?}", x.display());
+            fs::read_to_string(x.to_str().unwrap()).unwrap()
+        })
+        .collect();
+
+    let mut v_shader_ind: usize = 0;
+    let mut f_shader_ind: usize = 0;
 
     let pipeline_params = PipelineParams {
         depth_write: true,
         depth_test: Comparison::LessOrEqual,
         ..Default::default()
     };
-
-    let material = load_material(
-        ShaderSource::Glsl {
-            vertex: &vertex_shader,
-            fragment: &fragment_shader,
-        },
-        MaterialParams {
-            pipeline_params,
-            ..Default::default()
-        },
-    )
-    .unwrap();
 
     let mut state = State {
         camera_angle: 0.,
@@ -226,6 +232,14 @@ async fn main() {
         match get_last_key_pressed() {
             Some(KeyCode::Escape) => break,
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
+            Some(KeyCode::Up) => {
+                v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
+                println!("Vertex shader {}", v_shader_ind)
+            }
+            Some(KeyCode::Right) => {
+                f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
+                println!("Fragment shader {}", f_shader_ind)
+            }
             None | _ => (),
         }
 
@@ -239,6 +253,21 @@ async fn main() {
         if state.camera_angle > 2.0 * 3.14 {
             state.camera_angle = 0.;
         }
+
+        let fragment_shader = &fragment_shaders[f_shader_ind];
+        let vertex_shader = &vertex_shaders[v_shader_ind];
+        let material = load_material(
+            ShaderSource::Glsl {
+                vertex: &vertex_shader,
+                fragment: &fragment_shader,
+            },
+            MaterialParams {
+                pipeline_params,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+
         camera.up = angle2vec(state.camera_angle);
         clear_background(BLACK);
         set_camera(&camera);

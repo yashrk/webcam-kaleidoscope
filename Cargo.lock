@@ -612,6 +612,7 @@ version = "0.1.0"
 dependencies = [
  "ffimage",
  "ffimage_yuv",
+ "glob",
  "jpeg-decoder",
  "macroquad",
  "v4l",

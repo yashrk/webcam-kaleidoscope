@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 ffimage = "0.10.0"
 ffimage_yuv = "0.10.0"
+glob = "0.3.1"
 jpeg-decoder = "0.3.1"
 macroquad = "0.4.5"
 v4l = "0.14.0"
