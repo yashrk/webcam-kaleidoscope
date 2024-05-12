@@ -37,6 +37,26 @@ fn angle2vec(angle: f32) -> Vec3 {
     vec3(x, y, 0.)
 }
 
+fn get_material(vertex_shader: &String, fragment_shader: &String) -> Material {
+    let pipeline_params = PipelineParams {
+        depth_write: true,
+        depth_test: Comparison::LessOrEqual,
+        ..Default::default()
+    };
+    load_material(
+        ShaderSource::Glsl {
+            vertex: vertex_shader,
+            fragment: fragment_shader,
+        },
+        MaterialParams {
+            pipeline_params,
+            uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
+            ..Default::default()
+        },
+    )
+    .unwrap()
+}
+
 #[macroquad::main(window_conf)]
 async fn main() {
     let dev = Device::new(0).expect("Failed to open device");
@@ -77,24 +97,10 @@ async fn main() {
     let mut v_shader_ind: usize = 0;
     let mut f_shader_ind: usize = 0;
 
-    let pipeline_params = PipelineParams {
-        depth_write: true,
-        depth_test: Comparison::LessOrEqual,
-        ..Default::default()
-    };
-    let mut material = load_material(
-        ShaderSource::Glsl {
-            vertex: &vertex_shaders[v_shader_ind],
-            fragment: &fragment_shaders[f_shader_ind],
-        },
-        MaterialParams {
-            pipeline_params,
-            uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
-            ..Default::default()
-        },
-    )
-    .unwrap();
-
+    let mut material = get_material(
+        &vertex_shaders[v_shader_ind],
+        &fragment_shaders[f_shader_ind],
+    );
     let mut state = State {
         camera_angle: 0.,
         is_rotating: true,
@@ -248,68 +254,36 @@ async fn main() {
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
-                material = load_material(
-                    ShaderSource::Glsl {
-                        vertex: &vertex_shaders[v_shader_ind],
-                        fragment: &fragment_shaders[f_shader_ind],
-                    },
-                    MaterialParams {
-                        pipeline_params,
-                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
-                        ..Default::default()
-                    },
-                )
-                .unwrap();
+                material = get_material(
+                    &vertex_shaders[v_shader_ind],
+                    &fragment_shaders[f_shader_ind],
+                );
                 println!("Vertex shader {}", v_shader_ind)
             }
             Some(KeyCode::Down) => {
                 v_shader_ind =
                     (v_shader_ind as i16 - 1).rem_euclid(vertex_shaders.len() as i16) as usize;
-                material = load_material(
-                    ShaderSource::Glsl {
-                        vertex: &vertex_shaders[v_shader_ind],
-                        fragment: &fragment_shaders[f_shader_ind],
-                    },
-                    MaterialParams {
-                        pipeline_params,
-                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
-                        ..Default::default()
-                    },
-                )
-                .unwrap();
+                material = get_material(
+                    &vertex_shaders[v_shader_ind],
+                    &fragment_shaders[f_shader_ind],
+                );
                 println!("Vertex shader {}", v_shader_ind)
             }
             Some(KeyCode::Left) => {
                 f_shader_ind =
                     (f_shader_ind as i16 - 1).rem_euclid(fragment_shaders.len() as i16) as usize;
-                material = load_material(
-                    ShaderSource::Glsl {
-                        vertex: &vertex_shaders[v_shader_ind],
-                        fragment: &fragment_shaders[f_shader_ind],
-                    },
-                    MaterialParams {
-                        pipeline_params,
-                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
-                        ..Default::default()
-                    },
-                )
-                .unwrap();
+                material = get_material(
+                    &vertex_shaders[v_shader_ind],
+                    &fragment_shaders[f_shader_ind],
+                );
                 println!("Fragment shader {}", f_shader_ind)
             }
             Some(KeyCode::Right) => {
                 f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
-                material = load_material(
-                    ShaderSource::Glsl {
-                        vertex: &vertex_shaders[v_shader_ind],
-                        fragment: &fragment_shaders[f_shader_ind],
-                    },
-                    MaterialParams {
-                        pipeline_params,
-                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
-                        ..Default::default()
-                    },
-                )
-                .unwrap();
+                material = get_material(
+                    &vertex_shaders[v_shader_ind],
+                    &fragment_shaders[f_shader_ind],
+                );
                 println!("Fragment shader {}", f_shader_ind)
             }
             _ => (),
