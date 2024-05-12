@@ -1,3 +1,4 @@
+use chrono::{Timelike, Utc};
 use glob::glob;
 use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
@@ -88,6 +89,7 @@ async fn main() {
         },
         MaterialParams {
             pipeline_params,
+            uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
             ..Default::default()
         },
     )
@@ -253,6 +255,7 @@ async fn main() {
                     },
                     MaterialParams {
                         pipeline_params,
+                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
                         ..Default::default()
                     },
                 )
@@ -300,6 +303,7 @@ async fn main() {
                     },
                     MaterialParams {
                         pipeline_params,
+                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
                         ..Default::default()
                     },
                 )
@@ -313,6 +317,11 @@ async fn main() {
         // GUI
         //
         texture.update(&image);
+        // Current time (since last midnight, in milliseconds)
+        let now = Utc::now();
+        let millis_since_midnight =
+            (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
+        material.set_uniform("ms_time", millis_since_midnight as f32);
         if state.is_rotating {
             state.camera_angle += 0.01;
         }
