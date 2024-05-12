@@ -272,6 +272,7 @@ async fn main() {
                     },
                     MaterialParams {
                         pipeline_params,
+                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
                         ..Default::default()
                     },
                 )
@@ -288,6 +289,7 @@ async fn main() {
                     },
                     MaterialParams {
                         pipeline_params,
+                        uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
                         ..Default::default()
                     },
                 )
