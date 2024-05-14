@@ -50,7 +50,10 @@ fn get_material(vertex_shader: &String, fragment_shader: &String) -> Material {
         },
         MaterialParams {
             pipeline_params,
-            uniforms: vec![("ms_time".to_owned(), UniformType::Float1)],
+            uniforms: vec![
+                ("ms_time".to_owned(), UniformType::Float1),
+                ("short_cycle".to_owned(), UniformType::Float1),
+            ],
             ..Default::default()
         },
     )
@@ -171,7 +174,10 @@ async fn main() {
         let now = Utc::now();
         let millis_since_midnight =
             (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
+        // We want to leave only 4 last digits
+        let short_cycle = millis_since_midnight % 10000;
         material.set_uniform("ms_time", millis_since_midnight as f32);
+        material.set_uniform("short_cycle", short_cycle as f32);
         if state.is_rotating {
             state.camera_angle += 0.01;
         }
@@ -187,7 +193,7 @@ async fn main() {
             0.1,
             RED,
             GRAY,
-            Vec3::ZERO,
+            vec3(0.0, 0.0, 0.5),
             Quat::from_xyzw(0., 1., 1., 0.),
         );
         gl_use_material(&material);
