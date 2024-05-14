@@ -300,8 +300,8 @@ async fn main() {
         let now = Utc::now();
         let millis_since_midnight =
             (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
-        // We want to leave only 5 last digits
-        let short_cycle = millis_since_midnight - (millis_since_midnight / 10000 * 10000);
+        // We want to leave only 4 last digits
+        let short_cycle = millis_since_midnight % 10000;
         material.set_uniform("ms_time", millis_since_midnight as f32);
         material.set_uniform("short_cycle", short_cycle as f32);
         if state.is_rotating {
