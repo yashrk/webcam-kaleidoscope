@@ -1,6 +1,5 @@
 use chrono::{Timelike, Utc};
 use glob::glob;
-use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 use std::f32::consts::PI;
@@ -13,6 +12,7 @@ use v4l::Device;
 use v4l::FourCC;
 
 use webcam::decoder::*;
+use webcam::mesh::get_mesh;
 
 const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
@@ -112,133 +112,7 @@ async fn main() {
         ..Default::default()
     };
 
-    let mesh_1 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(0., 2., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(2., 1., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-    let mesh_2 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(-2., 1., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(0., 2., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-    let mesh_3 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(-2., -1., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(-2., 1., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-    let mesh_4 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(-2., -1., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(0., -2., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-    let mesh_5 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(0., -2., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(2., -1., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-    let mesh_6 = Mesh {
-        vertices: vec![
-            Vertex {
-                position: vec3(0., 0., 0.),
-                uv: vec2(0., 0.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(2., 1., 0.),
-                uv: vec2(0., 1.),
-                color: WHITE,
-            },
-            Vertex {
-                position: vec3(2., -1., 0.),
-                uv: vec2(1., 1.),
-                color: WHITE,
-            },
-        ],
-        indices: vec![0, 1, 2],
-        texture: Some(texture.clone()),
-    };
-
+    let mesh = get_mesh(texture.clone());
     loop {
         //
         // Webcam
@@ -317,12 +191,7 @@ async fn main() {
             Quat::from_xyzw(0., 1., 1., 0.),
         );
         gl_use_material(&material);
-        draw_mesh(&mesh_1);
-        draw_mesh(&mesh_2);
-        draw_mesh(&mesh_3);
-        draw_mesh(&mesh_4);
-        draw_mesh(&mesh_5);
-        draw_mesh(&mesh_6);
+        mesh.iter().for_each(draw_mesh);
         gl_use_default_material();
 
         next_frame().await
