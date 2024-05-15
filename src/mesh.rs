@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 
 pub fn get_mesh(texture: Texture2D) -> Vec<Mesh> {
-    let points = vec![
+    let points = [
         (2., 1.),
         (0., 2.),
         (-2., 1.),
