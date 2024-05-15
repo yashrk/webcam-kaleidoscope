@@ -1,8 +1,19 @@
 use macroquad::prelude::*;
 use macroquad::Error;
 
+#[derive(Debug, Clone)]
+pub struct Shader {
+    pub path: String,
+    pub code: String,
+}
 
-pub fn get_material(vertex_shader: &String, fragment_shader: &String) -> Result<Material, Error> {
+impl std::fmt::Display for Shader {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.path)
+    }
+}
+
+pub fn get_material(vertex_shader: &Shader, fragment_shader: &Shader) -> Result<Material, Error> {
     let pipeline_params = PipelineParams {
         depth_write: true,
         depth_test: Comparison::LessOrEqual,
@@ -10,8 +21,8 @@ pub fn get_material(vertex_shader: &String, fragment_shader: &String) -> Result<
     };
     load_material(
         ShaderSource::Glsl {
-            vertex: vertex_shader,
-            fragment: fragment_shader,
+            vertex: &vertex_shader.code,
+            fragment: &fragment_shader.code,
         },
         MaterialParams {
             pipeline_params,
