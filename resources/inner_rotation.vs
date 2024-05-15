@@ -12,7 +12,7 @@ uniform float short_cycle;
 
 void main() {
     gl_Position = Projection * Model * vec4(position, 1);
-    float rotation = short_cycle / 3000.0;
+    float rotation = short_cycle / 10000.0 * 6.28318530718;
     mat2 rotation_matrix = mat2(cos(rotation), -sin(rotation),
                                 sin(rotation), cos(rotation));
     uv = texcoord;
