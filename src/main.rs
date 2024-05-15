@@ -2,7 +2,6 @@ use chrono::{Timelike, Utc};
 use glob::glob;
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
-use macroquad::Error;
 use std::f32::consts::PI;
 use std::fs;
 use v4l::buffer::Type;
@@ -13,6 +12,7 @@ use v4l::Device;
 use v4l::FourCC;
 
 use webcam::decoder::*;
+use webcam::material::get_material;
 use webcam::mesh::get_mesh;
 
 const WIDTH_U32: u32 = 640;
@@ -36,28 +36,6 @@ fn angle2vec(angle: f32) -> Vec3 {
     let x = angle.sin();
     let y = angle.cos();
     vec3(x, y, 0.)
-}
-
-fn get_material(vertex_shader: &String, fragment_shader: &String) -> Result<Material, Error> {
-    let pipeline_params = PipelineParams {
-        depth_write: true,
-        depth_test: Comparison::LessOrEqual,
-        ..Default::default()
-    };
-    load_material(
-        ShaderSource::Glsl {
-            vertex: vertex_shader,
-            fragment: fragment_shader,
-        },
-        MaterialParams {
-            pipeline_params,
-            uniforms: vec![
-                ("ms_time".to_owned(), UniformType::Float1),
-                ("short_cycle".to_owned(), UniformType::Float1),
-            ],
-            ..Default::default()
-        },
-    )
 }
 
 #[macroquad::main(window_conf)]
@@ -133,7 +111,7 @@ async fn main() {
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
                 println!("Vertex shader {}", v_shader_ind);
-                if let Ok(new_material) = get_material(
+                 if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
                 ) {
