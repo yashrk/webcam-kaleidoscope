@@ -12,6 +12,7 @@ use v4l::Device;
 use v4l::FourCC;
 
 use webcam::decoder::*;
+use webcam::material::get_material;
 use webcam::mesh::get_mesh;
 
 const WIDTH_U32: u32 = 640;
@@ -35,29 +36,6 @@ fn angle2vec(angle: f32) -> Vec3 {
     let x = angle.sin();
     let y = angle.cos();
     vec3(x, y, 0.)
-}
-
-fn get_material(vertex_shader: &String, fragment_shader: &String) -> Material {
-    let pipeline_params = PipelineParams {
-        depth_write: true,
-        depth_test: Comparison::LessOrEqual,
-        ..Default::default()
-    };
-    load_material(
-        ShaderSource::Glsl {
-            vertex: vertex_shader,
-            fragment: fragment_shader,
-        },
-        MaterialParams {
-            pipeline_params,
-            uniforms: vec![
-                ("ms_time".to_owned(), UniformType::Float1),
-                ("short_cycle".to_owned(), UniformType::Float1),
-            ],
-            ..Default::default()
-        },
-    )
-    .unwrap()
 }
 
 #[macroquad::main(window_conf)]
@@ -103,7 +81,8 @@ async fn main() {
     let mut material = get_material(
         &vertex_shaders[v_shader_ind],
         &fragment_shaders[f_shader_ind],
-    );
+    )
+    .unwrap();
     let mut state = State {
         camera_angle: 0.,
         is_rotating: true,
@@ -131,37 +110,45 @@ async fn main() {
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
-                material = get_material(
+                println!("Vertex shader {}", v_shader_ind);
+                 if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Vertex shader {}", v_shader_ind)
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Down) => {
                 v_shader_ind =
                     (v_shader_ind as i16 - 1).rem_euclid(vertex_shaders.len() as i16) as usize;
-                material = get_material(
+                println!("Vertex shader {}", v_shader_ind);
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Vertex shader {}", v_shader_ind)
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Left) => {
                 f_shader_ind =
                     (f_shader_ind as i16 - 1).rem_euclid(fragment_shaders.len() as i16) as usize;
-                material = get_material(
+                println!("Fragment shader {}", f_shader_ind);
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Fragment shader {}", f_shader_ind)
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Right) => {
                 f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
-                material = get_material(
+                println!("Fragment shader {}", f_shader_ind);
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Fragment shader {}", f_shader_ind)
+                ) {
+                    material = new_material;
+                }
             }
             _ => (),
         }
@@ -174,8 +161,8 @@ async fn main() {
         let now = Utc::now();
         let millis_since_midnight =
             (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
-        // We want to leave only 4 last digits
-        let short_cycle = millis_since_midnight % 10000;
+        // We want to leave only 5 last digits
+        let short_cycle = millis_since_midnight % 30000;
         material.set_uniform("ms_time", millis_since_midnight as f32);
         material.set_uniform("short_cycle", short_cycle as f32);
         if state.is_rotating {
