@@ -2,6 +2,7 @@ use chrono::{Timelike, Utc};
 use glob::glob;
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
+use macroquad::Error;
 use std::f32::consts::PI;
 use std::fs;
 use v4l::buffer::Type;
@@ -37,7 +38,7 @@ fn angle2vec(angle: f32) -> Vec3 {
     vec3(x, y, 0.)
 }
 
-fn get_material(vertex_shader: &String, fragment_shader: &String) -> Material {
+fn get_material(vertex_shader: &String, fragment_shader: &String) -> Result<Material, Error> {
     let pipeline_params = PipelineParams {
         depth_write: true,
         depth_test: Comparison::LessOrEqual,
@@ -57,7 +58,6 @@ fn get_material(vertex_shader: &String, fragment_shader: &String) -> Material {
             ..Default::default()
         },
     )
-    .unwrap()
 }
 
 #[macroquad::main(window_conf)]
@@ -102,8 +102,8 @@ async fn main() {
 
     let mut material = get_material(
         &vertex_shaders[v_shader_ind],
-        &fragment_shaders[f_shader_ind],
-    );
+        &fragment_shaders[f_shader_ind])
+	.unwrap();
     let mut state = State {
         camera_angle: 0.,
         is_rotating: true,
@@ -131,37 +131,37 @@ async fn main() {
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
+                println!("Vertex shader {}", v_shader_ind);
                 material = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Vertex shader {}", v_shader_ind)
+                ).unwrap();
             }
             Some(KeyCode::Down) => {
                 v_shader_ind =
                     (v_shader_ind as i16 - 1).rem_euclid(vertex_shaders.len() as i16) as usize;
+                println!("Vertex shader {}", v_shader_ind);
                 material = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Vertex shader {}", v_shader_ind)
+                ).unwrap();
             }
             Some(KeyCode::Left) => {
                 f_shader_ind =
                     (f_shader_ind as i16 - 1).rem_euclid(fragment_shaders.len() as i16) as usize;
+                println!("Fragment shader {}", f_shader_ind);
                 material = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Fragment shader {}", f_shader_ind)
+                ).unwrap();
             }
             Some(KeyCode::Right) => {
                 f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
+                println!("Fragment shader {}", f_shader_ind);
                 material = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                );
-                println!("Fragment shader {}", f_shader_ind)
+                ).unwrap();
             }
             _ => (),
         }
