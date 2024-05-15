@@ -102,8 +102,9 @@ async fn main() {
 
     let mut material = get_material(
         &vertex_shaders[v_shader_ind],
-        &fragment_shaders[f_shader_ind])
-	.unwrap();
+        &fragment_shaders[f_shader_ind],
+    )
+    .unwrap();
     let mut state = State {
         camera_angle: 0.,
         is_rotating: true,
@@ -132,36 +133,44 @@ async fn main() {
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
                 println!("Vertex shader {}", v_shader_ind);
-                material = get_material(
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                ).unwrap();
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Down) => {
                 v_shader_ind =
                     (v_shader_ind as i16 - 1).rem_euclid(vertex_shaders.len() as i16) as usize;
                 println!("Vertex shader {}", v_shader_ind);
-                material = get_material(
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                ).unwrap();
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Left) => {
                 f_shader_ind =
                     (f_shader_ind as i16 - 1).rem_euclid(fragment_shaders.len() as i16) as usize;
                 println!("Fragment shader {}", f_shader_ind);
-                material = get_material(
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                ).unwrap();
+                ) {
+                    material = new_material;
+                }
             }
             Some(KeyCode::Right) => {
                 f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
                 println!("Fragment shader {}", f_shader_ind);
-                material = get_material(
+                if let Ok(new_material) = get_material(
                     &vertex_shaders[v_shader_ind],
                     &fragment_shaders[f_shader_ind],
-                ).unwrap();
+                ) {
+                    material = new_material;
+                }
             }
             _ => (),
         }
