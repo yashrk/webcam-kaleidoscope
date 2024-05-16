@@ -13,7 +13,7 @@ use v4l::FourCC;
 
 use webcam::decoder::*;
 use webcam::material::{get_material, Shader};
-use webcam::mesh::get_mesh;
+use webcam::meshes::{get_hex, get_triangles};
 
 const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
@@ -100,7 +100,9 @@ async fn main() {
         ..Default::default()
     };
 
-    let mesh = get_mesh(texture.clone());
+    let meshes = vec![get_triangles(3, texture.clone()), get_hex(texture.clone())];
+    let mut mesh_ind = 0;
+    let mut mesh = &meshes[mesh_ind as usize];
     loop {
         //
         // Webcam
@@ -114,6 +116,10 @@ async fn main() {
         match get_last_key_pressed() {
             Some(KeyCode::Escape) => break,
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
+            Some(KeyCode::M) => {
+                mesh_ind = (mesh_ind + 1) % (meshes.len() as i32);
+                mesh = &meshes[mesh_ind as usize];
+            }
             Some(KeyCode::Up) => {
                 v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
                 println!("Vertex shader {}", vertex_shaders[v_shader_ind]);

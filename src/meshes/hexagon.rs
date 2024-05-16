@@ -2,7 +2,7 @@ use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 
-pub fn get_mesh(texture: Texture2D) -> Vec<Mesh> {
+pub fn get_hex(texture: Texture2D) -> Vec<Mesh> {
     let points = [
         (2., 1.),
         (0., 2.),
