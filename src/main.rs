@@ -58,7 +58,7 @@ async fn main() {
     let mut image = Image::gen_image_color(fmt.width as u16, fmt.height as u16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let fragment_shaders: Vec<_> = glob("resources/*.fs")
+    let fragment_shaders: Vec<_> = glob("shaders/*.fs")
         .expect("Failed to read glob pattern")
         .flatten()
         .map(|x| {
@@ -69,7 +69,7 @@ async fn main() {
             }
         })
         .collect();
-    let vertex_shaders: Vec<_> = glob("resources/*.vs")
+    let vertex_shaders: Vec<_> = glob("shaders/*.vs")
         .expect("Failed to read glob pattern")
         .flatten()
         .map(|x| {
