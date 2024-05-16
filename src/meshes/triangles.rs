@@ -14,10 +14,10 @@ pub fn get_triangles(nlevels: i16, texture: Texture2D) -> Vec<Mesh> {
         })
         .collect();
 
-    while top_points.len() > 0 {
+    while !top_points.is_empty() {
         let bottom_points: Vec<_> = top_points[0..top_points.len() - 1]
-            .into_iter()
-            .map(|p| ((p.0 .0 + 1., p.0 .1 - 2.), ((2 + p.1) % 3) as usize))
+            .iter()
+            .map(|p| ((p.0 .0 + 1., p.0 .1 - 2.), ((2 + p.1) % 3)))
             .collect();
         for i in 0..bottom_points.len() {
             res.push(Mesh {
