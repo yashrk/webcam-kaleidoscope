@@ -12,7 +12,7 @@ use v4l::Device;
 use v4l::FourCC;
 
 use webcam::decoder::*;
-use webcam::material::{get_material, Shader};
+use webcam::material::Shader;
 use webcam::meshes::{get_hex, get_triangles};
 use webcam::state::State;
 
@@ -77,18 +77,13 @@ async fn main() {
         })
         .collect();
 
-    let mut v_shader_ind: usize = 0;
-    let mut f_shader_ind: usize = 0;
-
-    let mut state = State {
-        camera_angle: 0.,
-        is_rotating: true,
-        material: get_material(
-            &vertex_shaders[v_shader_ind],
-            &fragment_shaders[f_shader_ind],
-        )
-        .unwrap(),
-    };
+    let mut state = State::new(
+        0.,
+        true,
+        vertex_shaders,
+        fragment_shaders,
+        vec![get_triangles(3, texture.clone()), get_hex(texture.clone())],
+    );
     let mut camera = Camera3D {
         position: vec3(0., 0., -5.),
         up: angle2vec(state.camera_angle),
@@ -96,9 +91,6 @@ async fn main() {
         ..Default::default()
     };
 
-    let meshes = vec![get_triangles(3, texture.clone()), get_hex(texture.clone())];
-    let mut mesh_ind = 0;
-    let mut mesh = &meshes[mesh_ind as usize];
     loop {
         //
         // Webcam
@@ -113,42 +105,19 @@ async fn main() {
             Some(KeyCode::Escape) => break,
             Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
             Some(KeyCode::M) => {
-                mesh_ind = (mesh_ind + 1) % (meshes.len() as i32);
-                mesh = &meshes[mesh_ind as usize];
+                state.figure.next_mesh();
             }
             Some(KeyCode::Up) => {
-                v_shader_ind = (v_shader_ind + 1) % vertex_shaders.len();
-                println!("Vertex shader {}", vertex_shaders[v_shader_ind]);
-                state.update_material(
-                    &vertex_shaders[v_shader_ind],
-                    &fragment_shaders[f_shader_ind],
-                );
+                state.style.next_vertex_shader();
             }
             Some(KeyCode::Down) => {
-                v_shader_ind =
-                    (v_shader_ind as i16 - 1).rem_euclid(vertex_shaders.len() as i16) as usize;
-                println!("Vertex shader {}", vertex_shaders[v_shader_ind]);
-                state.update_material(
-                    &vertex_shaders[v_shader_ind],
-                    &fragment_shaders[f_shader_ind],
-                );
+                state.style.prev_vertex_shader();
             }
             Some(KeyCode::Left) => {
-                f_shader_ind =
-                    (f_shader_ind as i16 - 1).rem_euclid(fragment_shaders.len() as i16) as usize;
-                println!("Fragment shader {}", fragment_shaders[f_shader_ind]);
-                state.update_material(
-                    &vertex_shaders[v_shader_ind],
-                    &fragment_shaders[f_shader_ind],
-                );
+                state.style.prev_fragment_shader();
             }
             Some(KeyCode::Right) => {
-                f_shader_ind = (f_shader_ind + 1) % fragment_shaders.len();
-                println!("Fragment shader {}", fragment_shaders[f_shader_ind]);
-                state.update_material(
-                    &vertex_shaders[v_shader_ind],
-                    &fragment_shaders[f_shader_ind],
-                );
+                state.style.next_fragment_shader();
             }
             _ => (),
         }
@@ -163,12 +132,9 @@ async fn main() {
             (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
         // We want to leave only 5 last digits
         let short_cycle = millis_since_midnight % 30000;
-        state
-            .material
-            .set_uniform("ms_time", millis_since_midnight as f32);
-        state
-            .material
-            .set_uniform("short_cycle", short_cycle as f32);
+        let material = state.get_material();
+        material.set_uniform("ms_time", millis_since_midnight as f32);
+        material.set_uniform("short_cycle", short_cycle as f32);
         if state.is_rotating {
             state.camera_angle += 0.01;
         }
@@ -187,8 +153,8 @@ async fn main() {
             vec3(0.0, 0.0, 0.5),
             Quat::from_xyzw(0., 1., 1., 0.),
         );
-        gl_use_material(&state.material);
-        mesh.iter().for_each(draw_mesh);
+        gl_use_material(&state.get_material());
+        state.get_mesh().iter().for_each(draw_mesh);
         gl_use_default_material();
 
         next_frame().await
