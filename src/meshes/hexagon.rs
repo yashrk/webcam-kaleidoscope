@@ -1,15 +1,22 @@
+use std::collections::HashSet;
+
 use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 
 pub fn get_hex(texture: Texture2D) -> Vec<Mesh> {
+    _get_hex(texture, (0, 0))
+}
+
+pub fn _get_hex(texture: Texture2D, center: (i32, i32)) -> Vec<Mesh> {
+    let (cx, cy) = (center.0 as f32, center.1 as f32);
     let points = [
-        (2., 1.),
-        (0., 2.),
-        (-2., 1.),
-        (-2., -1.),
-        (0., -2.),
-        (2., -1.),
+        (2. + cx, 1. + cy),
+        (0. + cx, 2. + cy),
+        (-2. + cx, 1. + cy),
+        (-2. + cx, -1. + cy),
+        (0. + cx, -2. + cy),
+        (2. + cx, -1. + cy),
     ];
     (0..points.len())
         .map(|i| {
@@ -17,7 +24,7 @@ pub fn get_hex(texture: Texture2D) -> Vec<Mesh> {
             Mesh {
                 vertices: vec![
                     Vertex {
-                        position: vec3(0., 0., 0.),
+                        position: vec3(cx, cy, 0.),
                         uv: vec2(0., 0.),
                         color: WHITE,
                     },
@@ -41,4 +48,35 @@ pub fn get_hex(texture: Texture2D) -> Vec<Mesh> {
             }
         })
         .collect()
+}
+
+pub fn get_hexagons(nlevels: i16, texture: Texture2D) -> Vec<Mesh> {
+    let mut res = _get_hex(texture.clone(), (0, 0));
+    let mut centers = HashSet::from([(0, 0)]);
+    let mut new_centers = HashSet::from([(0, 0)]);
+    for _nlevel in 0..nlevels {
+        let mut centers_to_add = HashSet::<(i32, i32)>::from_iter(
+            new_centers
+                .iter()
+                .map(|x| {
+                    vec![
+                        (x.0 - 4, x.1),
+                        (x.0 + 4, x.1),
+                        (x.0 - 2, x.1 - 3),
+                        (x.0 - 2, x.1 + 3),
+                        (x.0 + 2, x.1 - 3),
+                        (x.0 + 2, x.1 + 3),
+                    ]
+                })
+                .flatten()
+                .filter(|x| !centers.contains(x))
+                .collect::<Vec<(i32, i32)>>(),
+        );
+        centers.extend(centers_to_add.clone());
+        new_centers = centers_to_add.clone();
+        centers_to_add
+            .drain()
+            .for_each(|x| res.append(&mut _get_hex(texture.clone(), x)))
+    }
+    res
 }

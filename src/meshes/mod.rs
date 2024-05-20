@@ -2,7 +2,7 @@ use macroquad::models::Mesh;
 mod hexagon;
 mod triangles;
 
-pub use hexagon::get_hex;
+pub use hexagon::{get_hex, get_hexagons};
 pub use triangles::get_triangles;
 
 pub struct Figure {
