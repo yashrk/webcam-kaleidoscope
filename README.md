@@ -8,6 +8,6 @@
 | `m`            | Change mesh            |
 | `←`, `→`       | Change fragment shader |
 | `↑`, `↓`       | Change vertex shader   |
-| `PgUp`, `PgDn` | Change vertex shader   |
+| `PgUp`, `PgDn` | Change camera height   |
 | `ESC`          | Exit                   |
 
