@@ -79,13 +79,14 @@ async fn main() {
 
     let mut state = State::new(
         0.,
+        -5.,
         true,
         vertex_shaders,
         fragment_shaders,
         vec![get_triangles(3, texture.clone()), get_hex(texture.clone())],
     );
     let mut camera = Camera3D {
-        position: vec3(0., 0., -5.),
+        position: vec3(0., 0., state.camera_height),
         up: angle2vec(state.camera_angle),
         target: vec3(0., 0., 0.),
         ..Default::default()
@@ -122,6 +123,13 @@ async fn main() {
             _ => (),
         }
 
+        if is_key_down(KeyCode::PageUp) {
+            state.increase_height();
+        }
+        if is_key_down(KeyCode::PageDown) {
+            state.decrease_height();
+        }
+
         //
         // GUI
         //
@@ -143,6 +151,7 @@ async fn main() {
         }
 
         camera.up = angle2vec(state.camera_angle);
+        camera.position = vec3(0., 0., state.camera_height);
         clear_background(BLACK);
         set_camera(&camera);
         draw_grid_ex(
