@@ -58,7 +58,7 @@ pub fn get_hexagons(nlevels: i16, texture: Texture2D) -> Vec<Mesh> {
         let mut centers_to_add = HashSet::<(i32, i32)>::from_iter(
             new_centers
                 .iter()
-                .map(|x| {
+                .flat_map(|x| {
                     vec![
                         (x.0 - 4, x.1),
                         (x.0 + 4, x.1),
@@ -68,7 +68,6 @@ pub fn get_hexagons(nlevels: i16, texture: Texture2D) -> Vec<Mesh> {
                         (x.0 + 2, x.1 + 3),
                     ]
                 })
-                .flatten()
                 .filter(|x| !centers.contains(x))
                 .collect::<Vec<(i32, i32)>>(),
         );
