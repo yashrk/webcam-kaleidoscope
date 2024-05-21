@@ -133,11 +133,11 @@ async fn main() {
             state.decrease_height();
         }
 
-	let (_, y) = mouse_wheel();
-	if y > 0.01 {
-	    state.increase_height();
-	} else if y < -0.01 {
-	    state.decrease_height();
+        let (_, y) = mouse_wheel();
+        if y > 0.01 {
+            state.increase_height();
+        } else if y < -0.01 {
+            state.decrease_height();
         }
         //
         // GUI
