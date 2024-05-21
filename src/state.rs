@@ -12,9 +12,9 @@ pub struct State {
     pub figure: Figure,
 }
 
-const height_step: f32 = 0.05;
-const min_height: f32 = -7.0;
-const max_height: f32 = 7.0;
+const HEIGHT_STEP: f32 = 0.05;
+const MIN_HEIGHT: f32 = -7.0;
+const MAX_HEIGHT: f32 = 7.0;
 
 impl State {
     pub fn get_material(&self) -> Material {
@@ -24,10 +24,10 @@ impl State {
         self.figure.get_mesh()
     }
     pub fn increase_height(&mut self) {
-        self.camera_height = f32::min(max_height, self.camera_height + height_step);
+        self.camera_height = f32::min(MAX_HEIGHT, self.camera_height + HEIGHT_STEP);
     }
     pub fn decrease_height(&mut self) {
-        self.camera_height = f32::max(min_height, self.camera_height - height_step);
+        self.camera_height = f32::max(MIN_HEIGHT, self.camera_height - HEIGHT_STEP);
     }
     pub fn new(
         camera_angle: f32,
