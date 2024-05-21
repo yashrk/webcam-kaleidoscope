@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Clippy
-      cargo clippy -- -D warnings
+      run: cargo clippy -- -D warnings
 
   codestyle:
 
