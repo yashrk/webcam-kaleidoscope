@@ -19,6 +19,7 @@ use webcam::state::State;
 const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
+const WHEEL_THRESHOLD: f32 = 0.01;
 
 fn window_conf() -> Conf {
     Conf {
@@ -133,6 +134,12 @@ async fn main() {
             state.decrease_height();
         }
 
+        let (_, y) = mouse_wheel();
+        if y > WHEEL_THRESHOLD {
+            state.increase_height();
+        } else if y < -WHEEL_THRESHOLD {
+            state.decrease_height();
+        }
         //
         // GUI
         //
