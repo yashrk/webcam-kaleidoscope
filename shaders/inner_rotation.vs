@@ -1,6 +1,6 @@
 #version 100
-const float PI = 3.14159265358;
-precision lowp float;
+precision mediump float;
+const float PI = 3.1416;
 
 attribute vec3 position;
 attribute vec2 texcoord;
