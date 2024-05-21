@@ -1,6 +1,6 @@
 #version 100
 precision mediump float;
-const float PI = 3.14;
+const float PI = 3.1416;
 
 varying vec2 uv;
 
