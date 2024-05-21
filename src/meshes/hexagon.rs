@@ -68,7 +68,7 @@ pub fn get_hexagons(nlevels: i16, texture: Texture2D) -> Vec<Mesh> {
                 .collect::<Vec<(i32, i32)>>(),
         );
         centers.extend(centers_to_add.clone());
-        new_centers = centers_to_add.clone();
+	new_centers.clone_from(&centers_to_add);
         centers_to_add
             .drain()
             .for_each(|x| res.append(&mut _get_hex(texture.clone(), x)))
