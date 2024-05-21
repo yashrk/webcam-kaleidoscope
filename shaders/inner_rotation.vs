@@ -1,5 +1,5 @@
 #version 100
-precision lowp float;
+precision mediump float;
 const float PI = 3.14;
 
 attribute vec3 position;

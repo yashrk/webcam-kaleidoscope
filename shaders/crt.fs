@@ -1,5 +1,5 @@
 #version 100
-precision lowp float;
+precision mediump float;
 
 varying vec4 color;
 varying vec2 uv;
