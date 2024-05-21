@@ -11,3 +11,5 @@
 | `PgUp`, `PgDn` | Change camera height   |
 | `ESC`          | Exit                   |
 
+## Mouse wheel
+Change camera height
