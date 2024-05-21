@@ -13,7 +13,7 @@ use v4l::FourCC;
 
 use webcam::decoder::*;
 use webcam::material::Shader;
-use webcam::meshes::{get_hex, get_triangles};
+use webcam::meshes::{get_hexagons, get_triangles};
 use webcam::state::State;
 
 const WIDTH_U32: u32 = 640;
@@ -83,7 +83,10 @@ async fn main() {
         true,
         vertex_shaders,
         fragment_shaders,
-        vec![get_triangles(3, texture.clone()), get_hex(texture.clone())],
+        vec![
+            get_triangles(3, texture.clone()),
+            get_hexagons(1, texture.clone()),
+        ],
     );
     let mut camera = Camera3D {
         position: vec3(0., 0., state.camera_height),
