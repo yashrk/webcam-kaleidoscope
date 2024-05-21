@@ -24,10 +24,10 @@ impl State {
         self.figure.get_mesh()
     }
     pub fn increase_height(&mut self) {
-        self.camera_height = f32::min(max_height, self.camera_height+height_step);
+        self.camera_height = f32::min(max_height, self.camera_height + height_step);
     }
     pub fn decrease_height(&mut self) {
-        self.camera_height = f32::max(min_height, self.camera_height-height_step);
+        self.camera_height = f32::max(min_height, self.camera_height - height_step);
     }
     pub fn new(
         camera_angle: f32,
