@@ -4,11 +4,7 @@ use macroquad::models::{Mesh, Vertex};
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 
-pub fn get_hex(texture: Texture2D) -> Vec<Mesh> {
-    _get_hex(texture, (0, 0))
-}
-
-pub fn _get_hex(texture: Texture2D, center: (i32, i32)) -> Vec<Mesh> {
+fn _get_hex(texture: Texture2D, center: (i32, i32)) -> Vec<Mesh> {
     let (cx, cy) = (center.0 as f32, center.1 as f32);
     let points = [
         (2. + cx, 1. + cy),
