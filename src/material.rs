@@ -38,16 +38,28 @@ impl Style {
     }
 
     pub fn set_material(&mut self) {
-        if let Ok(new_material) = get_material(
+        match get_material(
             &self.vertex_shaders[self.v_shader_ind],
             &self.fragment_shaders[self.f_shader_ind],
         ) {
-            self.material = new_material;
-        } else {
-            println!(
-                "Unable to switch material to {} and {}, ignore",
-                self.vertex_shaders[self.v_shader_ind], self.fragment_shaders[self.f_shader_ind],
-            )
+            Ok(new_material) => {
+                self.material = new_material;
+            }
+            Err(Error::ShaderError(e)) => {
+                println!(
+                    "Unable to switch material to {} and {}: {}, ignore",
+                    self.vertex_shaders[self.v_shader_ind],
+                    self.fragment_shaders[self.f_shader_ind],
+                    e
+                );
+            }
+            _ => {
+                println!(
+                    "Unable to switch material to {} and {}: unknown error, ignore",
+                    self.vertex_shaders[self.v_shader_ind],
+                    self.fragment_shaders[self.f_shader_ind],
+                );
+            }
         }
     }
 
