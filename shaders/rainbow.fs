@@ -6,7 +6,7 @@ varying vec2 uv;
 uniform sampler2D Texture;
 
 float peak(float center, float slope, float height) {
-  return 1./(pow(slope * uv.x-center, 2.0) + 1.)*height;
+  return height/(pow(slope * uv.x-center, 2.0) + 1.);
 }
 
 void main() {
