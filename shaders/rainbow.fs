@@ -11,10 +11,11 @@ float peak(float center, float slope, float height) {
 
 void main() {
   vec4 textureColor = texture2D(Texture, uv);
+  float meanColor = (textureColor.r + textureColor.g + textureColor.b)/3.0;
   vec4 rainbow;
-  rainbow.r = max(peak(-0.5,0.8,1.2),peak(1.2,1.2,0.3));
-  rainbow.g = peak(0.5,3.2,0.5);
-  rainbow.b = peak(0.9,0.7,1.2);
+  rainbow.r = max(peak(-0.2,0.7,2.0),peak(1.2,1.2,0.3));
+  rainbow.g = peak(0.65,3.2,0.45);
+  rainbow.b = peak(1.1,0.9,1.3);
   rainbow.a = 1.0;
-  gl_FragColor = textureColor * rainbow;
+  gl_FragColor = vec4(meanColor, meanColor, meanColor, 1.0) * rainbow;
 }
