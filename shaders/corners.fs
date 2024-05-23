@@ -11,5 +11,5 @@ void main() {
   gradientColor.g = uv.y;
   gradientColor.b = smoothstep(0.0, 1.0, 1.0 - sqrt(pow(uv.x, 2.0) + pow(uv.y, 2.0)));
   gradientColor.a = 1.0;
-  gl_FragColor = pow(mix(gradientColor, texture2D(Texture, uv), 0.15), vec4(2.0, 2.0, 2.0, 1.0));
+  gl_FragColor = gradientColor * texture2D(Texture, uv);
 }
