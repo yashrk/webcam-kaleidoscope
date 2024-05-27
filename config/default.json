@@ -1,1 +1,3 @@
-{"keyboard": "full"}
+{"keyboard": "full",
+ "webcamera": {"width": 640, "height": 480}
+}

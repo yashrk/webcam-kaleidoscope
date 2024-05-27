@@ -1,6 +1,6 @@
 # webcam-kaleidoscope
-
-## Keyboard controls
+## Standard controls
+### Keyboard controls
 
 | Key            | Action                 |
 |----------------|------------------------|
@@ -11,5 +11,8 @@
 | `PgUp`, `PgDn` | Change camera height   |
 | `ESC`          | Exit                   |
 
-## Mouse wheel
+### Mouse wheel
 Change camera height
+
+## Local configuration
+To redefine config params put `local.json` file to `config` folder.

@@ -19,8 +19,6 @@ use webcam::material::Shader;
 use webcam::meshes::{get_hexagons, get_triangles};
 use webcam::state::State;
 
-const WIDTH_U32: u32 = 640;
-const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
 
 fn window_conf() -> Conf {
@@ -39,10 +37,18 @@ fn angle2vec(angle: f32) -> Vec3 {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    let settings = Config::builder()
+        .add_source(File::with_name("config/default.json").required(false))
+        .add_source(File::with_name("config/local.json").required(false))
+        .build()
+        .unwrap();
+    // Deserialize the config object into your Settings struct:
+    let settings: Settings = settings.try_deserialize().unwrap();
+
     let dev = Device::new(0).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
-    fmt.width = WIDTH_U32;
-    fmt.height = HEIGHT_U32;
+    fmt.width = settings.webcamera.width;
+    fmt.height = settings.webcamera.height;
     fmt.fourcc = FourCC::new(b"YVUV");
     println!("Format to set:\n{}", fmt);
     let fmt = dev.set_format(&fmt).expect("Failed to write format");
@@ -98,14 +104,6 @@ async fn main() {
         ..Default::default()
     };
 
-    let settings = Config::builder()
-        .add_source(File::with_name("config/default.json").required(false))
-        .add_source(File::with_name("config/local.json").required(false))
-        .build()
-        .unwrap();
-
-    // Deserialize the config object into your Settings struct:
-    let settings: Settings = settings.try_deserialize().unwrap();
     let process_input = match settings.keyboard {
         Keyboard::Full => full_process_input,
         Keyboard::Mini => mini_process_input,
