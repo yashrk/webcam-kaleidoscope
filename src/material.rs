@@ -63,6 +63,48 @@ impl Style {
         }
     }
 
+    pub fn set_vetrex_shader(&mut self, name: String) {
+        if let Some(ind) = self
+            .vertex_shaders
+            .iter()
+            .position(|x| x.path == format!("shaders/{}.vs", name))
+        {
+            self.v_shader_ind = ind;
+            println!("Setting vertex shader to {name} by name");
+            self.set_material()
+        }
+    }
+    pub fn set_fragment_shader(&mut self, name: String) {
+        if let Some(ind) = self
+            .fragment_shaders
+            .iter()
+            .position(|x| x.path == format!("shaders/{}.fs", name))
+        {
+            self.f_shader_ind = ind;
+            println!("Setting fragment shader to {name} by name");
+            self.set_material()
+        }
+    }
+
+    pub fn set_shaders(&mut self, vshader: String, fshader: String) {
+        if let Some(ind) = self
+            .vertex_shaders
+            .iter()
+            .position(|x| x.path == format!("shaders/{}.vs", vshader))
+        {
+            self.v_shader_ind = ind;
+        }
+        if let Some(ind) = self
+            .fragment_shaders
+            .iter()
+            .position(|x| x.path == format!("shaders/{}.fs", fshader))
+        {
+            self.f_shader_ind = ind;
+        }
+        println!("Setting fragment shader to {fshader}, vertex shader to {vshader} by name");
+        self.set_material()
+    }
+
     pub fn next_vertex_shader(&mut self) {
         self.v_shader_ind = (self.v_shader_ind + 1) % self.vertex_shaders.len();
         println!("Vertex shader {}", self.vertex_shaders[self.v_shader_ind]);
