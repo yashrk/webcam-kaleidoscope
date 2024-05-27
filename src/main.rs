@@ -11,6 +11,7 @@ use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
 
+use webcam::controls::{full_process_input, Command};
 use webcam::decoder::*;
 use webcam::material::Shader;
 use webcam::meshes::{get_hexagons, get_triangles};
@@ -19,7 +20,6 @@ use webcam::state::State;
 const WIDTH_U32: u32 = 640;
 const HEIGHT_U32: u32 = 480;
 const BUFFER_COUNT: u32 = 4;
-const WHEEL_THRESHOLD: f32 = 0.01;
 
 fn window_conf() -> Conf {
     Conf {
@@ -96,6 +96,7 @@ async fn main() {
         ..Default::default()
     };
 
+    let process_input = full_process_input;
     loop {
         //
         // Webcam
@@ -106,40 +107,33 @@ async fn main() {
         //
         // Input
         //
-        match get_last_key_pressed() {
-            Some(KeyCode::Escape) => break,
-            Some(KeyCode::R) => state.is_rotating = !state.is_rotating,
-            Some(KeyCode::M) => {
+        match process_input() {
+            Some(Command::Quit) => break,
+            Some(Command::SwitchRotation) => state.is_rotating = !state.is_rotating,
+            Some(Command::NextMesh) => {
                 state.figure.next_mesh();
             }
-            Some(KeyCode::Up) => {
+            Some(Command::NextVertexShader) => {
                 state.style.next_vertex_shader();
             }
-            Some(KeyCode::Down) => {
+            Some(Command::PrevVertexShader) => {
                 state.style.prev_vertex_shader();
             }
-            Some(KeyCode::Left) => {
+            Some(Command::PrevFragmentShader) => {
                 state.style.prev_fragment_shader();
             }
-            Some(KeyCode::Right) => {
+            Some(Command::NextFragmentShader) => {
                 state.style.next_fragment_shader();
+            }
+            Some(Command::CameraDown) => {
+                state.decrease_height();
+            }
+            Some(Command::CameraUp) => {
+                state.increase_height();
             }
             _ => (),
         }
 
-        if is_key_down(KeyCode::PageUp) {
-            state.increase_height();
-        }
-        if is_key_down(KeyCode::PageDown) {
-            state.decrease_height();
-        }
-
-        let (_, y) = mouse_wheel();
-        if y > WHEEL_THRESHOLD {
-            state.increase_height();
-        } else if y < -WHEEL_THRESHOLD {
-            state.decrease_height();
-        }
         //
         // GUI
         //
