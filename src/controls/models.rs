@@ -1,4 +1,9 @@
-pub enum Keyboards {
+use serde::Deserialize;
+
+#[derive(Deserialize, Clone, Copy, Default, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum Keyboard {
+    #[default]
     Full,
     Mini,
 }

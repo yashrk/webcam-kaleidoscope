@@ -13,10 +13,11 @@ pub fn process_input() -> Option<Command> {
         Some(KeyCode::Key4) => Some(Command::NextFragmentShader),
         Some(KeyCode::Key9) => Some(Command::CameraDown),
         Some(KeyCode::Key7) => Some(Command::CameraUp),
-	Some(KeyCode::L) => Some(
-	    Command::Shaders("crt".to_string(), "crt".to_string())),
-	Some(KeyCode::C) => Some(
-	    Command::Shaders("inner_rotation".to_string(), "test".to_string())),
+        Some(KeyCode::L) => Some(Command::Shaders("crt".to_string(), "crt".to_string())),
+        Some(KeyCode::C) => Some(Command::Shaders(
+            "inner_rotation".to_string(),
+            "test".to_string(),
+        )),
         _ => None,
     }
 }

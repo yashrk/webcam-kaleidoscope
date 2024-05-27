@@ -1,3 +1,4 @@
+pub mod config;
 pub mod controls;
 pub mod decoder;
 pub mod material;
