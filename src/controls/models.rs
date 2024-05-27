@@ -13,4 +13,7 @@ pub enum Command {
     PrevFragmentShader,
     NextVertexShader,
     PrevVertexShader,
+    FShader(String),
+    VShader(String),
+    Shaders(String, String),
 }

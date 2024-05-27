@@ -11,7 +11,7 @@ use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
 
-use webcam::controls::{full_process_input, Command};
+use webcam::controls::{full_process_input, mini_process_input, Command};
 use webcam::decoder::*;
 use webcam::material::Shader;
 use webcam::meshes::{get_hexagons, get_triangles};
@@ -96,7 +96,7 @@ async fn main() {
         ..Default::default()
     };
 
-    let process_input = full_process_input;
+    let process_input = mini_process_input;
     loop {
         //
         // Webcam
@@ -131,6 +131,15 @@ async fn main() {
             Some(Command::CameraUp) => {
                 state.increase_height();
             }
+	    Some(Command::Shaders(vshader, fshader)) => {
+		state.style.set_shaders(vshader, fshader);
+	    }
+	    Some(Command::FShader(fshader)) => {
+		state.style.set_fragment_shader(fshader);
+	    }
+	    Some(Command::VShader(vshader)) => {
+		state.style.set_vetrex_shader(vshader);
+	    }
             _ => (),
         }
 
