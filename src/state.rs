@@ -10,6 +10,10 @@ pub struct State {
     pub is_rotating: bool,
     pub style: Style,
     pub figure: Figure,
+    pub min_camera_height: f32,
+    pub max_camera_height: f32,
+    pub start_camera_height: f32,
+    pub camera_step: f32,
 }
 
 const HEIGHT_STEP: f32 = 0.05;
@@ -32,6 +36,9 @@ impl State {
     pub fn new(
         camera_angle: f32,
         camera_height: f32,
+	min_camera_height: f32,
+	max_camera_height: f32,
+	camera_step: f32,
         is_rotating: bool,
         vertex_shaders: Vec<Shader>,
         fragment_shaders: Vec<Shader>,
@@ -40,9 +47,13 @@ impl State {
         State {
             camera_angle,
             camera_height,
+	    min_camera_height,
+	    max_camera_height,
+	    camera_step,
             is_rotating,
             style: Style::new(vertex_shaders, fragment_shaders),
             figure: Figure::new(meshes),
+	    start_camera_height: camera_height,
         }
     }
 }
