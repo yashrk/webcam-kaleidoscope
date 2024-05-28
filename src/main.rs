@@ -87,9 +87,10 @@ async fn main() {
         .collect();
 
     let mut state = State::new(
-        0.,
-        -5.,
-        true,
+        settings.camera3d.start_height,
+        settings.camera3d.min_height,
+        settings.camera3d.max_height,
+        settings.camera3d.step,
         vertex_shaders,
         fragment_shaders,
         vec![
@@ -97,6 +98,9 @@ async fn main() {
             get_hexagons(1, texture.clone()),
         ],
     );
+    state
+        .style
+        .set_shaders("default".to_string(), "default".to_string());
     let mut camera = Camera3D {
         position: vec3(0., 0., state.camera_height),
         up: angle2vec(state.camera_angle),
@@ -141,6 +145,9 @@ async fn main() {
             }
             Some(Command::CameraUp) => {
                 state.increase_height();
+            }
+            Some(Command::CameraReset) => {
+                state.reset_camera_heigth();
             }
             Some(Command::Shaders(vshader, fshader)) => {
                 state.style.set_shaders(vshader, fshader);

@@ -8,8 +8,17 @@ pub struct WebCameraSettings {
     pub height: u32,
 }
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, Default)]
+pub struct Camera3DSettings {
+    pub min_height: f32,
+    pub max_height: f32,
+    pub start_height: f32,
+    pub step: f32,
+}
+
+#[derive(Deserialize, Clone, Debug, Default)]
 pub struct Settings {
     pub keyboard: Keyboard,
     pub webcamera: WebCameraSettings,
+    pub camera3d: Camera3DSettings,
 }

@@ -10,11 +10,11 @@ pub struct State {
     pub is_rotating: bool,
     pub style: Style,
     pub figure: Figure,
+    pub min_camera_height: f32,
+    pub max_camera_height: f32,
+    pub start_camera_height: f32,
+    pub camera_step: f32,
 }
-
-const HEIGHT_STEP: f32 = 0.05;
-const MIN_HEIGHT: f32 = -7.0;
-const MAX_HEIGHT: f32 = 7.0;
 
 impl State {
     pub fn get_material(&self) -> Material {
@@ -24,25 +24,39 @@ impl State {
         self.figure.get_mesh()
     }
     pub fn increase_height(&mut self) {
-        self.camera_height = f32::min(MAX_HEIGHT, self.camera_height + HEIGHT_STEP);
+        self.camera_height = f32::min(
+            self.max_camera_height,
+            self.camera_height + self.camera_step,
+        );
     }
     pub fn decrease_height(&mut self) {
-        self.camera_height = f32::max(MIN_HEIGHT, self.camera_height - HEIGHT_STEP);
+        self.camera_height = f32::max(
+            self.min_camera_height,
+            self.camera_height - self.camera_step,
+        );
+    }
+    pub fn reset_camera_heigth(&mut self) {
+        self.camera_height = self.start_camera_height;
     }
     pub fn new(
-        camera_angle: f32,
         camera_height: f32,
-        is_rotating: bool,
+        min_camera_height: f32,
+        max_camera_height: f32,
+        camera_step: f32,
         vertex_shaders: Vec<Shader>,
         fragment_shaders: Vec<Shader>,
         meshes: Vec<Vec<Mesh>>,
     ) -> Self {
         State {
-            camera_angle,
+            camera_angle: 0.,
             camera_height,
-            is_rotating,
+            min_camera_height,
+            max_camera_height,
+            camera_step,
+            is_rotating: true,
             style: Style::new(vertex_shaders, fragment_shaders),
             figure: Figure::new(meshes),
+            start_camera_height: camera_height,
         }
     }
 }
