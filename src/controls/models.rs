@@ -13,6 +13,7 @@ pub enum Command {
     NextMesh,
     CameraUp,
     CameraDown,
+    CameraReset,
     SwitchRotation,
     NextFragmentShader,
     PrevFragmentShader,
