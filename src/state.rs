@@ -39,23 +39,21 @@ impl State {
         self.camera_height = self.start_camera_height;
     }
     pub fn new(
-        camera_angle: f32,
         camera_height: f32,
         min_camera_height: f32,
         max_camera_height: f32,
         camera_step: f32,
-        is_rotating: bool,
         vertex_shaders: Vec<Shader>,
         fragment_shaders: Vec<Shader>,
         meshes: Vec<Vec<Mesh>>,
     ) -> Self {
         State {
-            camera_angle,
+            camera_angle: 0.,
             camera_height,
             min_camera_height,
             max_camera_height,
             camera_step,
-            is_rotating,
+            is_rotating: true,
             style: Style::new(vertex_shaders, fragment_shaders),
             figure: Figure::new(meshes),
             start_camera_height: camera_height,

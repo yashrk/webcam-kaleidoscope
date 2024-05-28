@@ -87,12 +87,10 @@ async fn main() {
         .collect();
 
     let mut state = State::new(
-        0.,
         settings.camera3d.start_height,
         settings.camera3d.min_height,
         settings.camera3d.max_height,
         settings.camera3d.step,
-        true,
         vertex_shaders,
         fragment_shaders,
         vec![
