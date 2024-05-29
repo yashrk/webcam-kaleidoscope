@@ -94,8 +94,8 @@ async fn main() {
         vertex_shaders,
         fragment_shaders,
         vec![
-            get_triangles(3, texture.clone()),
-            get_hexagons(1, texture.clone()),
+            get_triangles(settings.mesh.triangles.levels, texture.clone()),
+            get_hexagons(settings.mesh.hexagons.levels, texture.clone()),
         ],
     );
     state
