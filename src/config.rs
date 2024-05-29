@@ -17,8 +17,25 @@ pub struct Camera3DSettings {
 }
 
 #[derive(Deserialize, Clone, Debug, Default)]
+pub struct Trianges {
+    pub levels: i16,
+}
+
+#[derive(Deserialize, Clone, Debug, Default)]
+pub struct Hexagons {
+    pub levels: i16,
+}
+
+#[derive(Deserialize, Clone, Debug, Default)]
+pub struct Mesh {
+    pub triangles: Trianges,
+    pub hexagons: Hexagons,
+}
+
+#[derive(Deserialize, Clone, Debug, Default)]
 pub struct Settings {
     pub keyboard: Keyboard,
     pub webcamera: WebCameraSettings,
     pub camera3d: Camera3DSettings,
+    pub mesh: Mesh,
 }
