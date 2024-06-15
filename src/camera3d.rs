@@ -49,9 +49,9 @@ impl CameraState {
             self.angle += self.angle_step;
         }
         if self.angle > 2.0 * PI {
-            self.angle = self.angle - 2.0 * PI;
+            self.angle -= 2.0 * PI;
         } else if self.angle < -2.0 * PI {
-            self.angle = self.angle + 2.0 * PI;
+            self.angle += 2.0 * PI;
         }
 	
     }
