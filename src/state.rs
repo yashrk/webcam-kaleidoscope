@@ -5,9 +5,6 @@ use crate::camera3d::CameraState;
 use crate::material::{Shader, Style};
 use crate::meshes::Figure;
 
-
-
-
 pub struct State {
     pub style: Style,
     pub figure: Figure,
@@ -22,13 +19,13 @@ impl State {
         self.figure.get_mesh()
     }
     pub fn increase_height(&mut self) {
-	self.camera.increase_height();
+        self.camera.increase_height();
     }
     pub fn decrease_height(&mut self) {
-	self.camera.decrease_height();
+        self.camera.decrease_height();
     }
     pub fn reset_camera_heigth(&mut self) {
-	self.camera.reset_heigth();
+        self.camera.reset_heigth();
     }
     pub fn new(
         camera: CameraState,
@@ -39,7 +36,7 @@ impl State {
         State {
             style: Style::new(vertex_shaders, fragment_shaders),
             figure: Figure::new(meshes),
-	    camera,
+            camera,
         }
     }
 }

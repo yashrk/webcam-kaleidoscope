@@ -15,16 +15,10 @@ pub struct CameraState {
 
 impl CameraState {
     pub fn increase_height(&mut self) {
-        self.height = f32::min(
-            self.max_height,
-            self.height + self.height_step,
-        );
+        self.height = f32::min(self.max_height, self.height + self.height_step);
     }
     pub fn decrease_height(&mut self) {
-        self.height = f32::max(
-            self.min_height,
-            self.height - self.height_step,
-        );
+        self.height = f32::max(self.min_height, self.height - self.height_step);
     }
     pub fn reset_heigth(&mut self) {
         self.height = self.start_height;
@@ -42,7 +36,7 @@ impl CameraState {
         );
     }
     pub fn switch_rotation(&mut self) {
-	self.rotation = !self.rotation;
+        self.rotation = !self.rotation;
     }
     pub fn rotate(&mut self) {
         if self.rotation {
@@ -53,25 +47,24 @@ impl CameraState {
         } else if self.angle < -2.0 * PI {
             self.angle += 2.0 * PI;
         }
-	
     }
     pub fn new(
         height: f32,
         min_height: f32,
         max_height: f32,
         height_step: f32,
-	angle_step: f32,
-	angle_speed_change_step: f32,
-	max_angle_step: f32,
+        angle_step: f32,
+        angle_speed_change_step: f32,
+        max_angle_step: f32,
     ) -> Self {
         CameraState {
             angle: 0.,
             height,
             min_height,
             max_height,
-	    angle_step,
-	    angle_speed_change_step,
-	    max_angle_step,
+            angle_step,
+            angle_speed_change_step,
+            max_angle_step,
             height_step,
             rotation: true,
             start_height: height,

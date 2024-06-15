@@ -87,16 +87,16 @@ async fn main() {
         .collect();
 
     let camera3d = CameraState::new(
-	settings.camera3d.start_height,
-	settings.camera3d.min_height,
-	settings.camera3d.max_height,
-	settings.camera3d.step,
-	settings.camera3d.angle_step,
-	settings.camera3d.angle_speed_change_step,
-	settings.camera3d.max_angle_step,
+        settings.camera3d.start_height,
+        settings.camera3d.min_height,
+        settings.camera3d.max_height,
+        settings.camera3d.step,
+        settings.camera3d.angle_step,
+        settings.camera3d.angle_speed_change_step,
+        settings.camera3d.max_angle_step,
     );
     let mut state = State::new(
-	camera3d,
+        camera3d,
         vertex_shaders,
         fragment_shaders,
         vec![
@@ -186,7 +186,7 @@ async fn main() {
         let material = state.get_material();
         material.set_uniform("ms_time", millis_since_midnight as f32);
         material.set_uniform("short_cycle", short_cycle as f32);
-	state.camera.rotate();
+        state.camera.rotate();
 
         camera.up = angle2vec(state.camera.angle);
         camera.position = vec3(0., 0., state.camera.height);
