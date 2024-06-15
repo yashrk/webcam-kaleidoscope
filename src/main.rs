@@ -3,7 +3,6 @@ use config::{Config, File};
 use glob::glob;
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
-use std::f32::consts::PI;
 use std::fs;
 use v4l::buffer::Type;
 use v4l::io::mmap::Stream;
@@ -12,6 +11,7 @@ use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
 
+use webcam::camera3d::CameraState;
 use webcam::config::Settings;
 use webcam::controls::{full_process_input, mini_process_input, Command, Keyboard};
 use webcam::decoder::*;
@@ -86,11 +86,17 @@ async fn main() {
         })
         .collect();
 
+    let camera3d = CameraState::new(
+	settings.camera3d.start_height,
+	settings.camera3d.min_height,
+	settings.camera3d.max_height,
+	settings.camera3d.step,
+	settings.camera3d.angle_step,
+	settings.camera3d.angle_speed_change_step,
+	settings.camera3d.max_angle_step,
+    );
     let mut state = State::new(
-        settings.camera3d.start_height,
-        settings.camera3d.min_height,
-        settings.camera3d.max_height,
-        settings.camera3d.step,
+	camera3d,
         vertex_shaders,
         fragment_shaders,
         vec![
@@ -102,8 +108,8 @@ async fn main() {
         .style
         .set_shaders("default".to_string(), "default".to_string());
     let mut camera = Camera3D {
-        position: vec3(0., 0., state.camera_height),
-        up: angle2vec(state.camera_angle),
+        position: vec3(0., 0., state.camera.height),
+        up: angle2vec(state.camera.angle),
         target: vec3(0., 0., 0.),
         ..Default::default()
     };
@@ -124,7 +130,7 @@ async fn main() {
         //
         match process_input() {
             Some(Command::Quit) => break,
-            Some(Command::SwitchRotation) => state.is_rotating = !state.is_rotating,
+            Some(Command::SwitchRotation) => state.camera.switch_rotation(),
             Some(Command::NextMesh) => {
                 state.figure.next_mesh();
             }
@@ -145,6 +151,12 @@ async fn main() {
             }
             Some(Command::CameraUp) => {
                 state.increase_height();
+            }
+            Some(Command::IncreaseAngleSpeed) => {
+                state.camera.increase_angle_speed();
+            }
+            Some(Command::DecreaseAngleSpeed) => {
+                state.camera.decrease_angle_speed();
             }
             Some(Command::CameraReset) => {
                 state.reset_camera_heigth();
@@ -174,15 +186,10 @@ async fn main() {
         let material = state.get_material();
         material.set_uniform("ms_time", millis_since_midnight as f32);
         material.set_uniform("short_cycle", short_cycle as f32);
-        if state.is_rotating {
-            state.camera_angle += 0.01;
-        }
-        if state.camera_angle > 2.0 * PI {
-            state.camera_angle = 0.;
-        }
+	state.camera.rotate();
 
-        camera.up = angle2vec(state.camera_angle);
-        camera.position = vec3(0., 0., state.camera_height);
+        camera.up = angle2vec(state.camera.angle);
+        camera.position = vec3(0., 0., state.camera.height);
         clear_background(BLACK);
         set_camera(&camera);
         draw_grid_ex(

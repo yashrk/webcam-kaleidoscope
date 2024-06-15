@@ -22,4 +22,6 @@ pub enum Command {
     FShader(String),
     VShader(String),
     Shaders(String, String),
+    IncreaseAngleSpeed,
+    DecreaseAngleSpeed,
 }
