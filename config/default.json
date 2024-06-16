@@ -10,5 +10,8 @@
 	     },
  "mesh": {"triangles": {"levels": 3},
 	  "hexagons": {"levels": 1}
-	 }
+	 },
+ "default_cycle": 30000,
+ "max_cycle": 60000,
+ "cycle_step": 500
 }

@@ -24,4 +24,8 @@ pub enum Command {
     Shaders(String, String),
     IncreaseAngleSpeed,
     DecreaseAngleSpeed,
+    SetZeroAngleSpeed,
+    IncreaseCycle,
+    DecreaseCycle,
+    ResetCycle,
 }

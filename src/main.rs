@@ -1,4 +1,3 @@
-use chrono::{Timelike, Utc};
 use config::{Config, File};
 use glob::glob;
 use macroquad::prelude::*;
@@ -103,6 +102,9 @@ async fn main() {
             get_triangles(settings.mesh.triangles.levels, texture.clone()),
             get_hexagons(settings.mesh.hexagons.levels, texture.clone()),
         ],
+        settings.default_cycle,
+        settings.max_cycle,
+        settings.cycle_step,
     );
     state
         .style
@@ -158,8 +160,20 @@ async fn main() {
             Some(Command::DecreaseAngleSpeed) => {
                 state.camera.decrease_angle_speed();
             }
+            Some(Command::SetZeroAngleSpeed) => {
+                state.camera.set_zero_angle_speed();
+            }
             Some(Command::CameraReset) => {
                 state.reset_camera_heigth();
+            }
+            Some(Command::IncreaseCycle) => {
+                state.increase_cycle();
+            }
+            Some(Command::DecreaseCycle) => {
+                state.decrease_cycle();
+            }
+            Some(Command::ResetCycle) => {
+                state.reset_cycle();
             }
             Some(Command::Shaders(vshader, fshader)) => {
                 state.style.set_shaders(vshader, fshader);
@@ -178,13 +192,9 @@ async fn main() {
         //
         texture.update(&image);
         // Current time (since last midnight, in milliseconds)
-        let now = Utc::now();
-        let millis_since_midnight =
-            (now.num_seconds_from_midnight() * 1000) + now.timestamp_subsec_millis();
-        // We want to leave only 5 last digits
-        let short_cycle = millis_since_midnight % 30000;
         let material = state.get_material();
-        material.set_uniform("short_cycle", short_cycle as f32);
+        state.next_phase();
+        material.set_uniform("phase", state.phase);
         state.camera.rotate();
 
         camera.up = angle2vec(state.camera.angle);

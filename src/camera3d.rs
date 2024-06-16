@@ -35,6 +35,9 @@ impl CameraState {
             self.angle_step - self.angle_speed_change_step,
         );
     }
+    pub fn set_zero_angle_speed(&mut self) {
+        self.angle_step = 0.
+    }
     pub fn switch_rotation(&mut self) {
         self.rotation = !self.rotation;
     }

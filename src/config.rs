@@ -41,4 +41,7 @@ pub struct Settings {
     pub webcamera: WebCameraSettings,
     pub camera3d: Camera3DSettings,
     pub mesh: Mesh,
+    pub default_cycle: u32,
+    pub max_cycle: u32,
+    pub cycle_step: u32,
 }

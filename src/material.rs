@@ -150,7 +150,7 @@ pub fn get_material(vertex_shader: &Shader, fragment_shader: &Shader) -> Result<
             pipeline_params,
             uniforms: vec![
                 ("ms_time".to_owned(), UniformType::Float1),
-                ("short_cycle".to_owned(), UniformType::Float1),
+                ("phase".to_owned(), UniformType::Float1),
             ],
             ..Default::default()
         },
