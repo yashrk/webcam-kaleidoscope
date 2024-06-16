@@ -5,7 +5,6 @@ const float PI = 3.1416;
 varying vec2 uv;
 
 uniform sampler2D Texture;
-uniform float ms_time;
 uniform float short_cycle;
 
 void main() {

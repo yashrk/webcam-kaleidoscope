@@ -184,7 +184,6 @@ async fn main() {
         // We want to leave only 5 last digits
         let short_cycle = millis_since_midnight % 30000;
         let material = state.get_material();
-        material.set_uniform("ms_time", millis_since_midnight as f32);
         material.set_uniform("short_cycle", short_cycle as f32);
         state.camera.rotate();
 
