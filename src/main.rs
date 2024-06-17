@@ -1,5 +1,6 @@
 use config::{Config, File};
 use glob::glob;
+use lazy_static::lazy_static;
 use macroquad::prelude::*;
 use macroquad::texture::Texture2D;
 use std::fs;
@@ -20,16 +21,23 @@ use webcam::state::State;
 
 const BUFFER_COUNT: u32 = 4;
 
-fn window_conf() -> Conf {
+fn get_config() -> Settings {
     let settings = Config::builder()
         .add_source(File::with_name("config/default.json").required(false))
         .add_source(File::with_name("config/local.json").required(false))
         .build()
         .unwrap();
-    let settings: Settings = settings.try_deserialize().unwrap();
+    settings.try_deserialize().unwrap()
+}
+
+lazy_static! {
+    static ref SETTINGS: Settings = get_config();
+}
+
+fn window_conf() -> Conf {
     Conf {
         window_title: "Kaleidoscope".to_owned(),
-        fullscreen: settings.fullscreen,
+        fullscreen: SETTINGS.clone().fullscreen,
         ..Default::default()
     }
 }
@@ -42,13 +50,7 @@ fn angle2vec(angle: f32) -> Vec3 {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let settings = Config::builder()
-        .add_source(File::with_name("config/default.json").required(false))
-        .add_source(File::with_name("config/local.json").required(false))
-        .build()
-        .unwrap();
-    // Deserialize the config object into your Settings struct:
-    let settings: Settings = settings.try_deserialize().unwrap();
+    let settings = SETTINGS.clone();
 
     let dev = Device::new(0).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
