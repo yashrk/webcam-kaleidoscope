@@ -29,7 +29,7 @@ fn window_conf() -> Conf {
     let settings: Settings = settings.try_deserialize().unwrap();
     Conf {
         window_title: "Kaleidoscope".to_owned(),
-        fullscreen: settings.fullscrean,
+        fullscreen: settings.fullscreen,
         ..Default::default()
     }
 }
