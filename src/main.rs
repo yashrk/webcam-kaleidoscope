@@ -21,9 +21,15 @@ use webcam::state::State;
 const BUFFER_COUNT: u32 = 4;
 
 fn window_conf() -> Conf {
+    let settings = Config::builder()
+        .add_source(File::with_name("config/default.json").required(false))
+        .add_source(File::with_name("config/local.json").required(false))
+        .build()
+        .unwrap();
+    let settings: Settings = settings.try_deserialize().unwrap();
     Conf {
         window_title: "Kaleidoscope".to_owned(),
-        fullscreen: false,
+        fullscreen: settings.fullscrean,
         ..Default::default()
     }
 }

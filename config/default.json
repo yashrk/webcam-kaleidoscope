@@ -13,5 +13,6 @@
 	 },
  "default_cycle": 30000,
  "max_cycle": 60000,
- "cycle_step": 500
+ "cycle_step": 500,
+ "fullscrean": false
 }

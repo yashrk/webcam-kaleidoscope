@@ -44,4 +44,5 @@ pub struct Settings {
     pub default_cycle: u32,
     pub max_cycle: u32,
     pub cycle_step: u32,
+    pub fullscrean: bool,
 }
