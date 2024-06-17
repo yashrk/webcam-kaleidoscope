@@ -196,19 +196,10 @@ async fn main() {
         state.next_phase();
         material.set_uniform("phase", state.phase);
         state.camera.rotate();
-
         camera.up = angle2vec(state.camera.angle);
         camera.position = vec3(0., 0., state.camera.height);
         clear_background(BLACK);
         set_camera(&camera);
-        draw_grid_ex(
-            20,
-            0.1,
-            RED,
-            GRAY,
-            vec3(0.0, 0.0, 0.5),
-            Quat::from_xyzw(0., 1., 1., 0.),
-        );
         gl_use_material(&state.get_material());
         state.get_mesh().iter().for_each(draw_mesh);
         gl_use_default_material();
