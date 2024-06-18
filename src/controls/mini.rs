@@ -6,7 +6,7 @@ pub fn process_input() -> Option<Command> {
     match get_last_key_pressed() {
         Some(KeyCode::Escape) => Some(Command::Quit),
         Some(KeyCode::Key1) => Some(Command::IncreaseCycle),
-	Some(KeyCode::Key2) => Some(Command::ResetCycle),
+        Some(KeyCode::Key2) => Some(Command::ResetCycle),
         Some(KeyCode::Key3) => Some(Command::DecreaseCycle),
         Some(KeyCode::Key4) => Some(Command::DecreaseAngleSpeed),
         Some(KeyCode::Key5) => Some(Command::SetZeroAngleSpeed),
@@ -20,7 +20,7 @@ pub fn process_input() -> Option<Command> {
         Some(KeyCode::C) => Some(Command::VShader("default".to_string())),
         Some(KeyCode::G) => Some(Command::VShader("inner_rotation".to_string())),
         Some(KeyCode::K) => Some(Command::VShader("quake".to_string())),
-	Some(KeyCode::B) => Some(Command::FShader("default".to_string())),
+        Some(KeyCode::B) => Some(Command::FShader("default".to_string())),
         Some(KeyCode::F) => Some(Command::FShader("test".to_string())),
         Some(KeyCode::J) => Some(Command::FShader("rgb_corners".to_string())),
         Some(KeyCode::A) => Some(Command::FShader("corners".to_string())),
