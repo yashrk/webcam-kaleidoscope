@@ -18,5 +18,23 @@
 ### Mouse wheel
 Change camera height
 
+### Mini keyboad controls
+#### Wheels
+
+| Action        | Wheel1                | Wheel2             | Wheel3 (big)            |
+|---------------|-----------------------|--------------------|-------------------------|
+| anticlockwise | Slow down shaders     | Slow down rotation | Camera down             |
+| press         | Default shaders speed | Stop rotation      | Default camera position |
+| clockwise     | Speed up shaders      | Speed up rotation  | Camera up               |
+
+#### Keys
+
+| Col1       | Col2               | Col3                 |
+|------------|--------------------|----------------------|
+| Next mesh  | Next vertex shader | Next fragment shader |
+| default.vs | inner_rotation.vs  | quake.vs             |
+| default.fs | test.fs            | rgb_corners.fs       |
+| corners.fs | time.fs            | rainbow.fs           |
+
 ## Local configuration
 To redefine config params put `local.json` file to `config` folder.
