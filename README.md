@@ -10,6 +10,10 @@
 | `↑`, `↓`       | Change vertex shader   |
 | `PgUp`, `PgDn` | Change camera height   |
 | `ESC`          | Exit                   |
+| `9`            | Slow down rotation     |
+| `0`            | Speed up rotation      |
+| `7`            | Speed up cycle         |
+| `8`            | Slow down cycle        |
 
 ### Mouse wheel
 Change camera height

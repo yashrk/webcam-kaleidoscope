@@ -1,3 +1,4 @@
+pub mod camera3d;
 pub mod config;
 pub mod controls;
 pub mod decoder;

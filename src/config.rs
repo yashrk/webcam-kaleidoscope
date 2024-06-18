@@ -14,6 +14,9 @@ pub struct Camera3DSettings {
     pub max_height: f32,
     pub start_height: f32,
     pub step: f32,
+    pub angle_step: f32,
+    pub max_angle_step: f32,
+    pub angle_speed_change_step: f32,
 }
 
 #[derive(Deserialize, Clone, Debug, Default)]
@@ -38,4 +41,8 @@ pub struct Settings {
     pub webcamera: WebCameraSettings,
     pub camera3d: Camera3DSettings,
     pub mesh: Mesh,
+    pub default_cycle: u32,
+    pub max_cycle: u32,
+    pub cycle_step: u32,
+    pub fullscreen: bool,
 }

@@ -12,6 +12,10 @@ pub fn process_input() -> Option<Command> {
         Some(KeyCode::Down) => Some(Command::PrevVertexShader),
         Some(KeyCode::Left) => Some(Command::PrevFragmentShader),
         Some(KeyCode::Right) => Some(Command::NextFragmentShader),
+        Some(KeyCode::Key9) => Some(Command::DecreaseAngleSpeed),
+        Some(KeyCode::Key0) => Some(Command::IncreaseAngleSpeed),
+        Some(KeyCode::Key7) => Some(Command::DecreaseCycle),
+        Some(KeyCode::Key8) => Some(Command::IncreaseCycle),
         _ => {
             if is_key_down(KeyCode::PageUp) {
                 Some(Command::CameraUp)

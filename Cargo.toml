@@ -10,6 +10,7 @@ ffimage = "0.10.0"
 ffimage_yuv = "0.10.0"
 glob = "0.3.1"
 jpeg-decoder = "0.3.1"
+lazy_static = "1.4.0"
 macroquad = "0.4.5"
 serde = { version = "1.0.203", features = ["derive"] }
 v4l = "0.14.0"

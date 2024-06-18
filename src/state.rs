@@ -1,19 +1,21 @@
+use chrono::{DateTime, Utc};
 use macroquad::models::Mesh;
 use macroquad::prelude::*;
 
+use crate::camera3d::CameraState;
 use crate::material::{Shader, Style};
 use crate::meshes::Figure;
 
 pub struct State {
-    pub camera_angle: f32,
-    pub camera_height: f32,
-    pub is_rotating: bool,
     pub style: Style,
     pub figure: Figure,
-    pub min_camera_height: f32,
-    pub max_camera_height: f32,
-    pub start_camera_height: f32,
-    pub camera_step: f32,
+    pub camera: CameraState,
+    pub cycle: u32,
+    pub max_cycle: u32,
+    pub default_cycle: u32,
+    pub cycle_step: u32,
+    pub phase: f32,
+    pub dt: DateTime<Utc>,
 }
 
 impl State {
@@ -24,39 +26,51 @@ impl State {
         self.figure.get_mesh()
     }
     pub fn increase_height(&mut self) {
-        self.camera_height = f32::min(
-            self.max_camera_height,
-            self.camera_height + self.camera_step,
-        );
+        self.camera.increase_height();
     }
     pub fn decrease_height(&mut self) {
-        self.camera_height = f32::max(
-            self.min_camera_height,
-            self.camera_height - self.camera_step,
-        );
+        self.camera.decrease_height();
     }
     pub fn reset_camera_heigth(&mut self) {
-        self.camera_height = self.start_camera_height;
+        self.camera.reset_heigth();
+    }
+    pub fn increase_cycle(&mut self) {
+        self.cycle = u32::min(self.max_cycle, self.cycle + self.cycle_step);
+    }
+    pub fn decrease_cycle(&mut self) {
+        self.cycle = u32::max(1, self.cycle - self.cycle_step);
+    }
+    pub fn reset_cycle(&mut self) {
+        self.cycle = self.default_cycle;
+    }
+    pub fn next_phase(&mut self) {
+        let dt = Utc::now();
+        let td = (dt - self.dt).num_milliseconds();
+        self.dt = dt;
+        self.phase += (td as f32) / (self.cycle as f32);
+        if self.phase > 1. {
+            self.phase -= 1.;
+        }
     }
     pub fn new(
-        camera_height: f32,
-        min_camera_height: f32,
-        max_camera_height: f32,
-        camera_step: f32,
+        camera: CameraState,
         vertex_shaders: Vec<Shader>,
         fragment_shaders: Vec<Shader>,
         meshes: Vec<Vec<Mesh>>,
+        default_cycle: u32,
+        max_cycle: u32,
+        cycle_step: u32,
     ) -> Self {
         State {
-            camera_angle: 0.,
-            camera_height,
-            min_camera_height,
-            max_camera_height,
-            camera_step,
-            is_rotating: true,
             style: Style::new(vertex_shaders, fragment_shaders),
             figure: Figure::new(meshes),
-            start_camera_height: camera_height,
+            camera,
+            cycle: default_cycle,
+            max_cycle,
+            default_cycle,
+            cycle_step,
+            phase: 0.,
+            dt: Utc::now(),
         }
     }
 }
