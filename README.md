@@ -18,8 +18,8 @@
 ### Mouse wheel
 Change camera height
 
-### Mini keyboad controls
-#### Wheels
+## Mini keyboad controls
+### Wheels
 
 | Action        | Wheel1                | Wheel2             | Wheel3 (big)            |
 |---------------|-----------------------|--------------------|-------------------------|
@@ -27,7 +27,7 @@ Change camera height
 | press         | Default shaders speed | Stop rotation      | Default camera position |
 | clockwise     | Speed up shaders      | Speed up rotation  | Camera up               |
 
-#### Keys
+### Keys
 
 | Col1       | Col2               | Col3                 |
 |------------|--------------------|----------------------|
