@@ -43,6 +43,6 @@ pub struct Settings {
     pub mesh: Mesh,
     pub default_cycle: u32,
     pub max_cycle: u32,
-    pub cycle_step: u32,
+    pub cycle_mult: f32,
     pub fullscreen: bool,
 }

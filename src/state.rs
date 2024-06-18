@@ -13,7 +13,7 @@ pub struct State {
     pub cycle: u32,
     pub max_cycle: u32,
     pub default_cycle: u32,
-    pub cycle_step: u32,
+    pub cycle_mult: f32,
     pub phase: f32,
     pub dt: DateTime<Utc>,
 }
@@ -35,10 +35,13 @@ impl State {
         self.camera.reset_heigth();
     }
     pub fn increase_cycle(&mut self) {
-        self.cycle = u32::min(self.max_cycle, self.cycle + self.cycle_step);
+        self.cycle = u32::min(
+            self.max_cycle,
+            ((self.cycle as f32) * self.cycle_mult) as u32,
+        );
     }
     pub fn decrease_cycle(&mut self) {
-        self.cycle = u32::max(1, self.cycle - self.cycle_step);
+        self.cycle = u32::max(1, ((self.cycle as f32) / self.cycle_mult) as u32);
     }
     pub fn reset_cycle(&mut self) {
         self.cycle = self.default_cycle;
@@ -59,7 +62,7 @@ impl State {
         meshes: Vec<Vec<Mesh>>,
         default_cycle: u32,
         max_cycle: u32,
-        cycle_step: u32,
+        cycle_mult: f32,
     ) -> Self {
         State {
             style: Style::new(vertex_shaders, fragment_shaders),
@@ -68,7 +71,7 @@ impl State {
             cycle: default_cycle,
             max_cycle,
             default_cycle,
-            cycle_step,
+            cycle_mult,
             phase: 0.,
             dt: Utc::now(),
         }

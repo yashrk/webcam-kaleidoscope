@@ -112,7 +112,7 @@ async fn main() {
         ],
         settings.default_cycle,
         settings.max_cycle,
-        settings.cycle_step,
+        settings.cycle_mult,
     );
     state
         .style
