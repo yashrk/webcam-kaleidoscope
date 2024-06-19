@@ -35,9 +35,12 @@ lazy_static! {
 }
 
 fn window_conf() -> Conf {
+    let settings = SETTINGS.clone();
     Conf {
         window_title: "Kaleidoscope".to_owned(),
-        fullscreen: SETTINGS.clone().fullscreen,
+        fullscreen: settings.fullscreen,
+        window_height: settings.window_height,
+        window_width: settings.window_width,
         ..Default::default()
     }
 }

@@ -45,4 +45,6 @@ pub struct Settings {
     pub max_cycle: u32,
     pub cycle_mult: f32,
     pub fullscreen: bool,
+    pub window_height: i32,
+    pub window_width: i32,
 }
