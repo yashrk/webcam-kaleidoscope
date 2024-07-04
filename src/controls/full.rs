@@ -7,6 +7,7 @@ use super::Keyboard;
 const WHEEL_THRESHOLD: f32 = 0.01;
 
 pub struct FullKeyboard {}
+
 impl Keyboard for FullKeyboard {
     fn process_input(&self) -> Option<Command> {
         match get_last_key_pressed() {

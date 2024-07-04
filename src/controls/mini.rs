@@ -3,6 +3,7 @@ use macroquad::prelude::*;
 use crate::controls::models::Command;
 
 use super::Keyboard;
+
 pub struct MiniKeyboard {}
 
 impl Keyboard for MiniKeyboard {
