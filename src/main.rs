@@ -63,10 +63,10 @@ async fn main() {
     println!("Format to set:\n{}", fmt);
     let fmt = dev.set_format(&fmt).expect("Failed to write format");
     println!("Format in use:\n{}", fmt);
-    let decode = if fmt.fourcc == FourCC::new(b"MJPG") {
-        decode_mjpeg
+    let decoder: Box<dyn Decoder> = if fmt.fourcc == FourCC::new(b"MJPG") {
+        Box::new(MjpegDecoder {})
     } else {
-        decode_yuyv
+        Box::new(YuyvDecoder {})
     };
     let mut stream = Stream::with_buffers(&dev, Type::VideoCapture, BUFFER_COUNT)
         .expect("Failed to create buffer stream");
@@ -136,7 +136,7 @@ async fn main() {
         // Webcam
         //
         let (buf, _meta) = stream.next().unwrap();
-        decode(&mut image, buf);
+        decoder.decode(&mut image, buf);
 
         //
         // Input
