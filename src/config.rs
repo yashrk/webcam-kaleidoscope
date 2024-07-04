@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use crate::controls::Keyboard;
+use crate::controls::KeyboardType;
 
 #[derive(Deserialize, Clone, Debug, Default)]
 pub struct WebCameraSettings {
@@ -37,7 +37,7 @@ pub struct Mesh {
 
 #[derive(Deserialize, Clone, Debug, Default)]
 pub struct Settings {
-    pub keyboard: Keyboard,
+    pub keyboard: KeyboardType,
     pub webcamera: WebCameraSettings,
     pub camera3d: Camera3DSettings,
     pub mesh: Mesh,

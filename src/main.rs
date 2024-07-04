@@ -10,10 +10,13 @@ use v4l::io::traits::CaptureStream;
 use v4l::video::Capture;
 use v4l::Device;
 use v4l::FourCC;
+use webcam::controls::full::FullKeyboard;
+use webcam::controls::mini::MiniKeyboard;
+use webcam::controls::Keyboard;
 
 use webcam::camera3d::CameraState;
 use webcam::config::Settings;
-use webcam::controls::{full_process_input, mini_process_input, Command, Keyboard};
+use webcam::controls::{Command, KeyboardType};
 use webcam::decoder::*;
 use webcam::material::Shader;
 use webcam::meshes::{get_hexagons, get_triangles};
@@ -127,9 +130,9 @@ async fn main() {
         ..Default::default()
     };
 
-    let process_input = match settings.keyboard {
-        Keyboard::Full => full_process_input,
-        Keyboard::Mini => mini_process_input,
+    let keyboard: Box<dyn Keyboard> = match settings.keyboard {
+        KeyboardType::Full => Box::new(FullKeyboard {}),
+        KeyboardType::Mini => Box::new(MiniKeyboard {}),
     };
     loop {
         //
@@ -141,7 +144,7 @@ async fn main() {
         //
         // Input
         //
-        match process_input() {
+        match keyboard.process_input() {
             Some(Command::Quit) => break,
             Some(Command::SwitchRotation) => state.camera.switch_rotation(),
             Some(Command::NextMesh) => {
