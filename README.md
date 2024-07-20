@@ -1,20 +1,20 @@
 # webcam-kaleidoscope
 ## What is it?
-A party activity, a moving wallpapar or a simple screensaver... We're not sure.
+Is it a party activity, a moving wallpaper or a simple screensaver... We're not sure.
 ### What's going on?
-Web camera observing something. 
-May be a table with small things, your face or fingers, or what you'd like to show.
-The application real-time transforms this image like a real kaleidoscope and shows results on the screen. 
-It can rotate it fast or slow, change colors or make it quake, depending on used shaders.
-Used shaders are ruled with a keyboard.
+A web camera is observing something. 
+It could be a table with small objects, your face or fingers, or anything else you want to show.
+The application transforms this image in real-time like a true kaleidoscope and displays the results on the screen. 
+Depending on the shaders used, it can rotate it quickly or slowly, change colors or make it shake.
+Keyboard controls are used to manage the shaders.
 One can use a standard keyboard and mouse or some mini-keyboard or numpad. 
-We used this one: https://aliexpress.ru/item/1005006109748866.html 
-For others it may be necessary to develop its own controls module (see `src/controls`).
+We used this one: https://aliexpress.ru/item/1005006109748866.html
+For others, it may be necessary to develop their own control module (see `src/controls`).
 ## What do you need?
-Some *nix system, web camera and screen.
-## How to configire?
-In `config` folder create `local.json` file. Then redefine there parameters to change.
-For example, if you want to make application fullscreen and to use our mini keyboard,write here
+You will need a system with v4l, a web camera, and a screen.
+## How to configure?
+In the `config` folder, create a `local.json` file. Then, you can modify the parameters in this file to change settings.
+For example, if you want to run the application in fullscreen mode and use our mini keyboard, add the following code to the file:
 ```
 {"fullscreen": true, "keyboard": "mini"}
 ```
