@@ -6,6 +6,7 @@ use crate::controls::KeyboardType;
 pub struct WebCameraSettings {
     pub width: u32,
     pub height: u32,
+    pub device_id: usize,
 }
 
 #[derive(Deserialize, Clone, Debug, Default)]

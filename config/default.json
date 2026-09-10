@@ -1,5 +1,5 @@
 {"keyboard": "full",
- "webcamera": {"width": 640, "height": 480},
+ "webcamera": {"width": 640, "height": 480, "device_id": 0},
  "camera3d": {"min_height": -7.0,
 	      "max_height": 0.0,
 	      "start_height": -5.0,

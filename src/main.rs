@@ -58,7 +58,7 @@ fn angle2vec(angle: f32) -> Vec3 {
 async fn main() {
     let settings = SETTINGS.clone();
 
-    let dev = Device::new(0).expect("Failed to open device");
+    let dev = Device::new(settings.webcamera.device_id).expect("Failed to open device");
     let mut fmt = dev.format().expect("Failed to read format");
     fmt.width = settings.webcamera.width;
     fmt.height = settings.webcamera.height;
