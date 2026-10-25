@@ -102,7 +102,14 @@ async fn main() {
     println!("Format to set:\n{}", fmt);
     let fmt = dev.set_format(&fmt).expect("Failed to write format");
     println!("Format in use:\n{}", fmt);
-    let (width, height) = (fmt.width as u16, fmt.height as u16);
+    let (width, height) = (fmt.width as usize, fmt.height as usize);
+    let crop = settings.webcamera.crop;
+    assert!(crop > 0. && crop <= 1., "webcamera.crop must be in (0, 1]");
+    let (crop_w, crop_h) = (
+        (width as f32 * crop) as usize,
+        (height as f32 * crop) as usize,
+    );
+    let (x0, y0) = ((width - crop_w) / 2, (height - crop_h) / 2);
     // Capture and decode off the render thread, so rendering runs at vsync, not camera rate
     let (frames_tx, frames) = mpsc::sync_channel::<Vec<u8>>(1);
     thread::spawn(move || {
@@ -115,25 +122,34 @@ async fn main() {
             .expect("Failed to create buffer stream");
         loop {
             let (buf, _meta) = stream.next().expect("Camera lost");
-            let mut rgba = vec![0; width as usize * height as usize * 4];
+            let mut rgba = vec![0; width * height * 4];
             decoder.decode(&mut rgba, buf);
+            let cropped: Vec<u8> = rgba
+                .chunks_exact(width * 4)
+                .skip(y0)
+                .take(crop_h)
+                .flat_map(|row| &row[x0 * 4..(x0 + crop_w) * 4])
+                .copied()
+                .collect();
             // Full means the renderer hasn't taken the previous frame yet: drop this one
-            if let Err(TrySendError::Disconnected(_)) = frames_tx.try_send(rgba) {
+            if let Err(TrySendError::Disconnected(_)) = frames_tx.try_send(cropped) {
                 break;
             }
         }
     });
-    let mut image = Image::gen_image_color(width, height, WHITE);
+    let mut image = Image::gen_image_color(crop_w as u16, crop_h as u16, WHITE);
     let texture = Texture2D::from_image(&image);
 
-    let fragment_shaders: Vec<_> = glob("shaders/*.fs")
-        .expect("Failed to read glob pattern")
-        .flatten()
-        .map(|x| {
-            println!("{:?}", x.display());
+    // Only the listed ones: the shader key walks every vertex x fragment combination
+    let fragment_shaders: Vec<_> = settings
+        .fragment_shaders
+        .iter()
+        .map(|name| {
+            let path = format!("shaders/{name}.fs");
+            println!("{path:?}");
             Shader {
-                path: x.to_str().unwrap().to_string(),
-                code: fs::read_to_string(x.to_str().unwrap()).unwrap(),
+                code: fs::read_to_string(&path).expect(&path),
+                path,
             }
         })
         .collect();
@@ -157,6 +173,7 @@ async fn main() {
         settings.camera3d.angle_step,
         settings.camera3d.angle_speed_change_step,
         settings.camera3d.max_angle_step,
+        settings.camera3d.angle_speeds,
     );
     let mut state = State::new(
         camera3d,
@@ -217,6 +234,12 @@ async fn main() {
             Some(Command::SwitchRotation) => state.camera.switch_rotation(),
             Some(Command::NextMesh) => {
                 state.figure.next_mesh();
+            }
+            Some(Command::NextShader) => {
+                state.style.next_shader();
+            }
+            Some(Command::NextAngleSpeed) => {
+                state.camera.next_angle_speed();
             }
             Some(Command::NextVertexShader) => {
                 state.style.next_vertex_shader();

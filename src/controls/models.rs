@@ -19,6 +19,9 @@ pub enum Command {
     SwitchRotation,
     NextFragmentShader,
     PrevFragmentShader,
+    // Walks every vertex shader, then the next fragment shader: all combinations on one key
+    NextShader,
+    NextAngleSpeed,
     NextVertexShader,
     PrevVertexShader,
     FShader(String),

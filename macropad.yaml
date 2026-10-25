@@ -6,7 +6,7 @@ columns: 3
 knobs: 1
 layers:
   - buttons:
-      - ["m", "up", "right"] # next mesh, next vertex shader, next fragment shader
+      - ["m", "n", "s"] # next mesh, next shader combination, next rotation speed
     knobs:
       # wheel instead of PageUp/PageDown: full.rs polls those with is_key_down and misses quick detents
       - ccw: "wheeldown"

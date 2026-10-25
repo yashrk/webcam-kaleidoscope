@@ -24,7 +24,7 @@ cargo run
 ```
 ## How to deploy?
 Copy `.env.example` to `.env` and set `HOST`. `make provision` once turns the box into a kiosk (boots into the app, restarts it on failure), then `make deploy`.
-`make pad` flashes the 3 key + knob macropad (`macropad.yaml`): keys switch mesh, vertex shader, fragment shader; the knob zooms.
+`make pad` flashes the 3 key + knob macropad (`macropad.yaml`): keys switch mesh, shader combination (vertex shaders, then the next fragment shader), rotation speed (`angle_speeds` multipliers of `angle_step`). Only `fragment_shaders` from the config are loaded; the knob zooms.
 After `autopilot.idle` seconds without input, the app presses random keys/knob every `autopilot.period` seconds until touched. Effect switches crossfade over `crossfade` seconds (0 disables).
 ## Standard controls
 ### Keyboard controls
@@ -33,6 +33,8 @@ After `autopilot.idle` seconds without input, the app presses random keys/knob e
 |----------------|------------------------|
 | `r`            | Start/stop rotation    |
 | `m`            | Change mesh            |
+| `n`            | Next shader combination |
+| `s`            | Next rotation speed    |
 | `←`, `→`       | Change fragment shader |
 | `↑`, `↓`       | Change vertex shader   |
 | `PgUp`, `PgDn` | Change camera height   |

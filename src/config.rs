@@ -8,6 +8,8 @@ pub struct WebCameraSettings {
     pub height: u32,
     pub device_id: usize,
     pub saturation: i64,
+    /// Fraction of width and height kept around the center, (0, 1]
+    pub crop: f32,
 }
 
 #[derive(Deserialize, Clone, Debug, Default)]
@@ -19,6 +21,7 @@ pub struct Camera3DSettings {
     pub angle_step: f32,
     pub max_angle_step: f32,
     pub angle_speed_change_step: f32,
+    pub angle_speeds: Vec<f32>,
 }
 
 #[derive(Deserialize, Clone, Debug, Default)]
@@ -54,6 +57,7 @@ pub struct Settings {
     pub max_cycle: u32,
     pub cycle_mult: f32,
     pub crossfade: f64,
+    pub fragment_shaders: Vec<String>,
     pub fullscreen: bool,
     pub window_height: i32,
     pub window_width: i32,

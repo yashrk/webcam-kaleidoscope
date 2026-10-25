@@ -59,8 +59,8 @@ impl Autopilot {
     fn effect(&mut self) {
         self.queue.push_back(match gen_range(0, 3) {
             0 => Command::NextMesh,
-            1 => Command::NextVertexShader,
-            _ => Command::NextFragmentShader,
+            1 => Command::NextShader,
+            _ => Command::NextAngleSpeed,
         });
     }
     // A knob twist, eased over ZOOM_SECONDS instead of jumping detent by detent

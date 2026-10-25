@@ -14,6 +14,8 @@ impl Keyboard for FullKeyboard {
             Some(KeyCode::Escape) => Some(Command::Quit),
             Some(KeyCode::R) => Some(Command::SwitchRotation),
             Some(KeyCode::M) => Some(Command::NextMesh),
+            Some(KeyCode::N) => Some(Command::NextShader),
+            Some(KeyCode::S) => Some(Command::NextAngleSpeed),
             Some(KeyCode::Up) => Some(Command::NextVertexShader),
             Some(KeyCode::Down) => Some(Command::PrevVertexShader),
             Some(KeyCode::Left) => Some(Command::PrevFragmentShader),
