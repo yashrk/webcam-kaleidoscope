@@ -28,7 +28,6 @@ impl Keyboard for MiniKeyboard {
             Some(KeyCode::F) => Some(Command::FShader("test".to_string())),
             Some(KeyCode::J) => Some(Command::FShader("rgb_corners".to_string())),
             Some(KeyCode::A) => Some(Command::FShader("corners".to_string())),
-            Some(KeyCode::E) => Some(Command::FShader("time".to_string())),
             Some(KeyCode::I) => Some(Command::FShader("rainbow".to_string())),
             _ => None,
         }

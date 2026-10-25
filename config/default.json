@@ -26,7 +26,7 @@
   "max_cycle": 300000,
   "cycle_mult": 1.2,
   "crossfade": 0.5,
-  "fragment_shaders": ["default", "rainbow", "time"],
+  "fragment_shaders": ["default", "rainbow", "corners"],
   "fullscreen": false,
   "window_height": 600,
   "window_width": 800

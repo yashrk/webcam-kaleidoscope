@@ -63,7 +63,7 @@ Change camera height
 | Next mesh  | Next vertex shader | Next fragment shader |
 | default.vs | inner_rotation.vs  |                      |
 | default.fs | test.fs            | rgb_corners.fs       |
-| corners.fs | time.fs            | rainbow.fs           |
+| corners.fs |                    | rainbow.fs           |
 
 ## Local configuration
 To redefine config params put `local.json` file to `config` folder.
