@@ -8,6 +8,10 @@ pub struct CameraState {
     pub start_height: f32,
     pub height_step: f32,
     pub angle_step: f32,
+    pub start_angle_step: f32,
+    // Multipliers of start_angle_step, cycled by one key
+    pub angle_speeds: Vec<f32>,
+    pub angle_speed_ind: usize,
     pub max_angle_step: f32,
     pub angle_speed_change_step: f32,
     pub rotation: bool,
@@ -15,10 +19,14 @@ pub struct CameraState {
 
 impl CameraState {
     pub fn increase_height(&mut self) {
-        self.height = f32::min(self.max_height, self.height + self.height_step);
+        self.shift_height(1.);
     }
     pub fn decrease_height(&mut self) {
-        self.height = f32::max(self.min_height, self.height - self.height_step);
+        self.shift_height(-1.);
+    }
+    pub fn shift_height(&mut self, detents: f32) {
+        self.height =
+            (self.height + detents * self.height_step).clamp(self.min_height, self.max_height);
     }
     pub fn reset_heigth(&mut self) {
         self.height = self.start_height;
@@ -38,12 +46,17 @@ impl CameraState {
     pub fn set_zero_angle_speed(&mut self) {
         self.angle_step = 0.
     }
+    pub fn next_angle_speed(&mut self) {
+        self.angle_speed_ind = (self.angle_speed_ind + 1) % self.angle_speeds.len();
+        self.angle_step = self.start_angle_step * self.angle_speeds[self.angle_speed_ind];
+    }
     pub fn switch_rotation(&mut self) {
         self.rotation = !self.rotation;
     }
-    pub fn rotate(&mut self) {
+    // angle_step is per frame at the camera's 30 fps, the rate rendering used to be tied to
+    pub fn rotate(&mut self, dt: f32) {
         if self.rotation {
-            self.angle += self.angle_step;
+            self.angle += self.angle_step * dt * 30.;
         }
         if self.angle > 2.0 * PI {
             self.angle -= 2.0 * PI;
@@ -59,6 +72,7 @@ impl CameraState {
         angle_step: f32,
         angle_speed_change_step: f32,
         max_angle_step: f32,
+        angle_speeds: Vec<f32>,
     ) -> Self {
         CameraState {
             angle: 0.,
@@ -66,6 +80,12 @@ impl CameraState {
             min_height,
             max_height,
             angle_step,
+            start_angle_step: angle_step,
+            angle_speed_ind: angle_speeds
+                .iter()
+                .position(|&x| x == 1.)
+                .expect("camera3d.angle_speeds must contain 1"),
+            angle_speeds,
             angle_speed_change_step,
             max_angle_step,
             height_step,

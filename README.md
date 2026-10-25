@@ -22,6 +22,10 @@ For example, if you want to run the application in fullscreen mode and use our m
 ```bash
 cargo run
 ```
+## How to deploy?
+Copy `.env.example` to `.env` and set `HOST`. `make provision` once turns the box into a kiosk (boots into the app, restarts it on failure), then `make deploy`.
+`make pad` flashes the 3 key + knob macropad (`macropad.yaml`): keys switch mesh, shader combination (vertex shaders, then the next fragment shader), rotation speed (`angle_speeds` multipliers of `angle_step`). Only `fragment_shaders` from the config are loaded; the knob zooms.
+After `autopilot.idle` seconds without input, the app presses random keys/knob every `autopilot.period` seconds until touched. Effect switches crossfade over `crossfade` seconds (0 disables).
 ## Standard controls
 ### Keyboard controls
 
@@ -29,6 +33,8 @@ cargo run
 |----------------|------------------------|
 | `r`            | Start/stop rotation    |
 | `m`            | Change mesh            |
+| `n`            | Next shader combination |
+| `s`            | Next rotation speed    |
 | `←`, `→`       | Change fragment shader |
 | `↑`, `↓`       | Change vertex shader   |
 | `PgUp`, `PgDn` | Change camera height   |
@@ -55,9 +61,9 @@ Change camera height
 | Col1       | Col2               | Col3                 |
 |------------|--------------------|----------------------|
 | Next mesh  | Next vertex shader | Next fragment shader |
-| default.vs | inner_rotation.vs  | quake.vs             |
+| default.vs | inner_rotation.vs  |                      |
 | default.fs | test.fs            | rgb_corners.fs       |
-| corners.fs | time.fs            | rainbow.fs           |
+| corners.fs |                    | rainbow.fs           |
 
 ## Local configuration
 To redefine config params put `local.json` file to `config` folder.

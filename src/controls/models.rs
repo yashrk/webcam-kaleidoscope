@@ -13,10 +13,15 @@ pub enum Command {
     NextMesh,
     CameraUp,
     CameraDown,
+    // Height change in knob detents, fractional for smooth zooms
+    CameraShift(f32),
     CameraReset,
     SwitchRotation,
     NextFragmentShader,
     PrevFragmentShader,
+    // Walks every vertex shader, then the next fragment shader: all combinations on one key
+    NextShader,
+    NextAngleSpeed,
     NextVertexShader,
     PrevVertexShader,
     FShader(String),

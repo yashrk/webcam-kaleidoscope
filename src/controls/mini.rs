@@ -24,12 +24,10 @@ impl Keyboard for MiniKeyboard {
             Some(KeyCode::L) => Some(Command::NextFragmentShader),
             Some(KeyCode::C) => Some(Command::VShader("default".to_string())),
             Some(KeyCode::G) => Some(Command::VShader("inner_rotation".to_string())),
-            Some(KeyCode::K) => Some(Command::VShader("quake".to_string())),
             Some(KeyCode::B) => Some(Command::FShader("default".to_string())),
             Some(KeyCode::F) => Some(Command::FShader("test".to_string())),
             Some(KeyCode::J) => Some(Command::FShader("rgb_corners".to_string())),
             Some(KeyCode::A) => Some(Command::FShader("corners".to_string())),
-            Some(KeyCode::E) => Some(Command::FShader("time".to_string())),
             Some(KeyCode::I) => Some(Command::FShader("rainbow".to_string())),
             _ => None,
         }

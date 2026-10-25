@@ -105,6 +105,17 @@ impl Style {
         self.set_material()
     }
 
+    pub fn next_shader(&mut self) {
+        self.v_shader_ind = (self.v_shader_ind + 1) % self.vertex_shaders.len();
+        if self.v_shader_ind == 0 {
+            self.f_shader_ind = (self.f_shader_ind + 1) % self.fragment_shaders.len();
+        }
+        println!(
+            "Shaders {} {}",
+            self.vertex_shaders[self.v_shader_ind], self.fragment_shaders[self.f_shader_ind]
+        );
+        self.set_material()
+    }
     pub fn next_vertex_shader(&mut self) {
         self.v_shader_ind = (self.v_shader_ind + 1) % self.vertex_shaders.len();
         println!("Vertex shader {}", self.vertex_shaders[self.v_shader_ind]);
